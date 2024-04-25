@@ -1,0 +1,51 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+.h-rem-12{
+    height: 12rem;
+}
+
+.i-cus:hover{
+    transition: 0.2s ease-in-out;
+    color: #74c0fc;
+    cursor: pointer;
+}
+#active{
+    color: #46a4ec;
+}
+
+.nav-item{
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.nav-item:hover{
+    background-color: #74c0fc;
+    border-radius: 20px;
+}
+button{
+    background-color: #74c0fc !important;
+    border: none !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+button:hover{
+    background-color: #46a4ec !important;
+}
+
+.cancel-btn{
+    background-color: white !important;
+    color: black !important;;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0;
+    border-bottom: 2px solid black !important;
+
+}
+
+.tab-title:hover{
+    background-color: #74c0fc !important;
+}   
+
