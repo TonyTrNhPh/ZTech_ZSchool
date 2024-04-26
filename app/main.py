@@ -1,12 +1,18 @@
-from flask import Flask, redirect, url_for, render_template
-from sqlalchemy import SQLAlchemy
+from flask import render_template, request, redirect, url_for
+from __init__ import app
 
 
-app = Flask(__name__)
+@app.route('/', methods=["GET", "POST"])
+def render_template_login():
+    if request.method == "POST":
+        username = request.form["username"]
+        if username:
+            return redirect(url_for("render_template_home"))
+    return render_template('login.html')
 
-@app.route('/')
+@app.route('/home')
 def render_template_home():
-        return render_template('home.html')
+    return render_template('home.html')
 
 @app.route('/news')
 def render_template_news():
