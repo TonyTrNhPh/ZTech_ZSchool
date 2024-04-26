@@ -1,18 +1,36 @@
-from flask import render_template, request, redirect, url_for
-from __init__ import app
+from flask import render_template, request, redirect, url_for, session
+from __init__ import app,db
+from models import Users, Announcements
 
 
 @app.route('/', methods=["GET", "POST"])
 def render_template_login():
     if request.method == "POST":
         username = request.form["username"]
-        if username:
-            return redirect(url_for("render_template_home"))
+        password = request.form["password"]
+        if username and password:
+            session['username'] = username
+            session['password'] = password
+            user_found = Users.query.filter_by(username=username).first()
+            if user_found:
+                if user_found.password == password:
+                    return redirect(url_for("render_template_home"))
     return render_template('login.html')
 
-@app.route('/home')
+@app.route('/logout')
+def render_template_logout():
+    session.pop('user', None)
+    return redirect(url_for("render_template_login"))
+
+@app.route('/home' , methods=['GET', 'POST'])
 def render_template_home():
-    return render_template('home.html')
+    if "user" in session:
+        name = session["user"]
+        if request.method == "POST":
+            password = request.form["password"]
+        return render_template('home.html')
+    else:
+        return redirect(url_for("render_template_login"))
 
 @app.route('/news')
 def render_template_news():
