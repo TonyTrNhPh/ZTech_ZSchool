@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin
 from src import app, db, lm
 
-
 @lm.user_loader
 def loader_user(user_id):
     return Users.query.get(user_id)

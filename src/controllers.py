@@ -2,10 +2,7 @@ from flask import render_template, request, redirect, url_for
 from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
-
-
-
-
+from src import dal
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,7 +22,6 @@ def login():
 
 @app.route('/logout')
 def logout():
-    
     logout_user()
     return redirect(url_for("login"))
 
@@ -75,9 +71,10 @@ def render_template_announcement_management():
     return render_template('announcement-management.html')
 
 
-@app.route('/user-management')
-def render_template_user_management():
-    return render_template('user-management.html')
+@app.route('/accounts')
+def accounts():
+    users = dal.get_all_users()
+    return render_template('user-management.html', users=users)
 
 
 @app.route('/teacher-profile')
