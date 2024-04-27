@@ -187,6 +187,86 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `course_documents`
+--
+
+DROP TABLE IF EXISTS `course_documents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_documents` (
+    `DocumentID` INT(11) NOT NULL AUTO_INCREMENT,
+    `DocumentName` VARCHAR(100) NOT NULL,
+    `Supplier` VARCHAR(100) NOT NULL,
+    `Year` INT(4) NOT NULL,
+    `CourseID` INT(11) NOT NULL,
+    PRIMARY KEY (`DocumentID`),
+    KEY `CourseID` (`CourseID`),
+    CONSTRAINT `fk_course_document_course` FOREIGN KEY (`CourseID`)
+        REFERENCES `courses` (`CourseID`)
+)  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_GENERAL_CI;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `course_documents`
+--
+
+LOCK TABLES `course_documents` WRITE;
+/*!40000 ALTER TABLE `course_documents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `course_documents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `course_feedback`
+--
+
+DROP TABLE IF EXISTS `course_feedback`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_feedback` (
+  `FeedbackID` int(11) NOT NULL AUTO_INCREMENT,
+  `CourseID` int(11) NOT NULL,
+  `Rating` int(11) NOT NULL,
+  `Comment` text,
+  PRIMARY KEY (`FeedbackID`),
+  CONSTRAINT `fk_course_feedback_course` FOREIGN KEY (`CourseID`) REFERENCES `courses` (`CourseID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `course_feedback`
+--
+
+LOCK TABLES `course_feedback` WRITE;
+/*!40000 ALTER TABLE `course_documents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `course_documents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `AttendanceID` INT(11) NOT NULL AUTO_INCREMENT,
+  `CourseID` INT(11) NOT NULL,
+  `Date` DATE NOT NULL,
+  `Status` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`AttendanceID`),
+  KEY `CourseID` (`CourseID`),
+  CONSTRAINT `fk_attendance_course` FOREIGN KEY (`CourseID`)
+        REFERENCES `courses` (`CourseID`)
+) ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_GENERAL_CI;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attendance`
+--
+
+LOCK TABLES `attendance` WRITE;
+/*!40000 ALTER TABLE `attendance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attendance` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
