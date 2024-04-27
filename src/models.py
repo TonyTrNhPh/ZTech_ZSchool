@@ -25,6 +25,9 @@ class Users(db.Model, UserMixin):
         self.usertype = usertype
         self.status = True
 
+    def get_id(self):
+        return (self.userid)
+
 
 class Announcements(db.Model):
     __tablename__ = 'announcements'
@@ -70,52 +73,3 @@ class Grades(db.Model):
     courseid = Column(Integer, ForeignKey(Courses.courseid), nullable=False)
     grade = Column(Float, nullable=False)
     status = Column(Boolean, default=True)
-
-
-def create_tables():
-    with app.app_context():
-        db.create_all()
-
-
-if __name__ == '__main__':
-    create_tables()
-    with app.app_context():
-        # Create a new user instance
-        example_user = Users(
-            username='sv',
-            password='123',
-            usertype='admin',
-        )
-        example_course = Courses(
-            coursename='Python',
-            teacherid='1',
-        )
-        example_teacher = Teachers(
-            userid='1',
-            fullname='vo',
-            department='python',
-        )
-        example_student = Students(
-            userid='1',
-            fullname='thai',
-            dateofbirth='2003/27/11',
-            gender='Nam'
-        )
-        example_grade = Grades(
-            studentid='1',
-            courseid='1',
-            grade='Python',
-        )
-        # Add the user to the session
-        db.session.add(example_user)
-
-        db.session.add(example_course)
-
-        db.session.add(example_teacher)
-
-        db.session.add(example_student)
-
-        db.session.add(example_grade)
-
-        # Commit the session to save the changes to the database
-        db.session.commit()

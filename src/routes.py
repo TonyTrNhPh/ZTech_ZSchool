@@ -1,7 +1,10 @@
-from flask import render_template, request, redirect, url_for, session
-from src import app, db
+from flask import render_template, request, redirect, url_for
+from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
+
+
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -11,18 +14,20 @@ def login():
         password = request.form['password']
         user = Users.query.filter_by(
             username=username, password=password).first()
+        print(user)
         if user:
             login_user(user)
             return redirect(url_for('index'))
         else:
-            return redirect(url_for('render_template_login'))
+            return render_template('login.html')
     return render_template('login.html')
 
 
 @app.route('/logout')
-def render_template_logout():
-    session.pop('user', None)
-    return redirect(url_for("render_template_login"))
+def logout():
+    
+    logout_user()
+    return redirect(url_for("login"))
 
 
 @app.route('/')
@@ -78,4 +83,3 @@ def render_template_user_management():
 @app.route('/teacher-profile')
 def render_template_teacher_profile():
     return render_template('teacher-profile.html')
-
