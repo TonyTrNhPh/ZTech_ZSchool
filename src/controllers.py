@@ -4,6 +4,7 @@ from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
 from src import dal
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -71,9 +72,25 @@ def render_template_announcement_management():
     return render_template('announcement-management.html')
 
 
-@app.route('/accounts')
+@app.route('/accounts', methods=['GET', 'POST'])
 def accounts():
     users = dal.get_all_users()
+    if request.method == 'POST':
+        action = request.form['action2']
+        print(action)
+        match action:
+            case 'add':
+                username = request.form['username']
+                password = request.form['password']
+                usertype = request.form['usertype']
+                dal.add_user(username, password, usertype)
+            case 'delete':
+                pass
+            case 'update':
+                pass
+
+        return render_template('user-management.html', users=users)
+
     return render_template('user-management.html', users=users)
 
 

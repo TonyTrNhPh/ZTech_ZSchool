@@ -1,156 +1,209 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="p-5">
+  <section class="p-5">
     <h3>Accounts Management</h3>
     <div>
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="tab-title" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1">All users</a></li>
-            <li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2">Students</a></li>
-            <li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3">Teachers</a></li>
-        </ul>
-        <div class="tab-content border border-1">
-            <div id="tab-1" class="tab-pane active" role="tabpanel">
-                <section class="p-5">
-                    <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>User list ("number")</h4>
-                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button></div>
-                    </section>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <td>{{loop.index}}</td>
-                                    <td>{{user.userid}}</td>
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.password}}</td>
-                                    <td>{{user.usertype}}</td>
-                                    <td>
-                                        {%if user.status == True%} Active {%else%} Inactive {%endif%}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="tab-title" role="presentation">
+          <a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1">All users</a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2">Students</a>
+        </li>
+        <li class="tab-title" role="presentation">
+          <a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3">Teachers</a>
+        </li>
+      </ul>
+      <div class="tab-content border border-1">
+        <div id="tab-1" class="tab-pane active" role="tabpanel">
+          <section class="p-5">
+            <section class="d-flex justify-content-sm-between mb-3">
+              <h4>User list ("number")</h4>
+              <div class="btn-group gap-3" role="group">
+                <button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button>
+              </div>
+            </section>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                    <tr>
+                      <td>{{ loop.index }}</td>
+                      <td>{{ user.userid }}</td>
+                      <td>{{ user.username }}</td>
+                      <td>{{ user.password }}</td>
+                      <td>{{ user.usertype }}</td>
+                      <td>
+                        {% if user.status == True %}
+                          Active
+                        {% else %}
+                          Inactive
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-            <div id="tab-2" class="tab-pane" role="tabpanel">
-                <section class="p-5">
-                    <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Student list ("number")</h4>
-                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button></div>
-                    </section>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                {% if user.usertype == 'Sinh viên'%}
-                                <tr>
-                                    <td>{{loop.index}}</td>
-                                    <td>{{user.userid}}</td>
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.password}}</td>
-                                    <td>{{user.usertype}}</td>
-                                    <td>
-                                        {%if user.status == True%} Active {%else%} Inactive {%endif%}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-            <div id="tab-3" class="tab-pane" role="tabpanel">
-                <section class="p-5">
-                    <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Teacher list ("number")</h4>
-                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button></div>
-                    </section>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>User ID</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Role</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                {% if user.usertype == 'Giáo viên'%}
-                                <tr>
-                                    <td>{{loop.index}}</td>
-                                    <td>{{user.userid}}</td>
-                                    <td>{{user.username}}</td>
-                                    <td>{{user.password}}</td>
-                                    <td>{{user.usertype}}</td>
-                                    <td>
-                                        {%if user.status == True%} Active {%else%} Inactive {%endif%}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
+          </section>
         </div>
+        <div id="tab-2" class="tab-pane" role="tabpanel">
+          <section class="p-5">
+            <section class="d-flex justify-content-sm-between mb-3">
+              <h4>Student list ("number")</h4>
+              <div class="btn-group gap-3" role="group">
+                <button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button>
+              </div>
+            </section>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                    {% if user.usertype == 'Sinh viên' %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.userid }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.password }}</td>
+                        <td>{{ user.usertype }}</td>
+                        <td>
+                          {% if user.status == True %}
+                            Active
+                          {% else %}
+                            Inactive
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+        <div id="tab-3" class="tab-pane" role="tabpanel">
+          <section class="p-5">
+            <section class="d-flex justify-content-sm-between mb-3">
+              <h4>Teacher list ("number")</h4>
+              <div class="btn-group gap-3" role="group">
+                <button class="btn btn-primary" type="button">Add new user</button><button class="btn btn-primary" type="button">Erase this user</button>
+              </div>
+            </section>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for user in users %}
+                    {% if user.usertype == 'Giáo viên' %}
+                      <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.userid }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.password }}</td>
+                        <td>{{ user.usertype }}</td>
+                        <td>
+                          {% if user.status == True %}
+                            Active
+                          {% else %}
+                            Inactive
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<section class="py-4 py-xl-5" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <section class="py-4 py-xl-5" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="container">
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                <div class="card mb-5">
-                    <div class="card-body p-sm-5">
-                        <h4 class="text-center mb-4">User details</h4>
-                        <section>
-                            <form class="text-center" method="post">
-                                <div class="mb-3"><input class="form-control" type="text" name="username" placeholder="Username" /></div>
-                                <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Password" /></div>
-                                <div class="d-flex"><input class="form-control" type="text"  placeholder="Role"/>
-                                    <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"></button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Admin</a>
-                                            <a class="dropdown-item" href="#">Student</a>
-                                            <a class="dropdown-item" href="#">Teacher</a></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3 d-flex justify-content-between mt-3"><button class="btn btn-primary d-block w-25">Save</button><button class="btn btn-primary d-block w-25 cancel-btn" type="button">Cancel</button></div>
-                            </form>
-                        </section>
+      <div class="row d-flex justify-content-center">
+        <div class="col-m d-8 col-lg-6 col-xl-5 col-xxl-4">
+          <div class="card mb-5">
+            <div class="card-body p-sm-5">
+              <h4 class="text-center mb-4">User details</h4>
+              <section>
+                <form class="text-center" method="post">
+                  <div class="mb-3">
+                    <input class="form-control" type="text" name="username" placeholder="Username" />
+                  </div>
+                  <div class="mb-3">
+                    <input class="form-control" type="password" name="password" placeholder="Password" />
+                  </div>
+                  <div class="d-flex">
+                    <input class="form-control" type="text" placeholder="Role" />
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"></button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Admin</a>
+                        <a class="dropdown-item" href="#">Student</a>
+                        <a class="dropdown-item" href="#">Teacher</a>
+                      </div>
                     </div>
-                </div>
+                  </div>
+                  <div class="mb-3 d-flex justify-content-between mt-3">
+                    <button class="btn btn-primary d-block w-25">Save</button><button class="btn btn-primary d-block w-25 cancel-btn" type="button">Cancel</button>
+                  </div>
+                </form>
+              </section>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-</section>
+  </section>
+  <form class="p-5" action="/accounts" method="post">
+    <h3>Add new user</h3>
+    <div class="mb-3">
+      <input class="form-control" type="text" name="username" placeholder="Username" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" type="password" name="password" placeholder="Password" />
+    </div>
+    <div class="mb-3">
+      <select class="form-select" name="usertype">
+        <option value="Admin">Admin</option>
+        <option value="Student">Student</option>
+        <option value="Teacher">Teacher</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <input type="hidden" name="action2" value="add" />
+      <button class="btn btn-primary d-block w-100" type="submit">Add user</button>
+    </div>
+  </form>
 {% endblock %}
