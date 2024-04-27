@@ -5,15 +5,15 @@
     <div>
         <ul class="nav nav-tabs" role="tablist">
             <li class="tab-title" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1">All Courses</a></li>
-            <li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2">Students</a></li>
-            <li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3">Teachers</a></li> 
+            <!--<li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-2">Students</a></li>
+            <li class="tab-title" role="presentation"><a class="nav-link" role="tab" data-bs-toggle="tab" href="#tab-3">Teachers</a></li> -->
         </ul>
         <div class="tab-content border border-1">
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
                         <h4>Course list ("number")</h4>
-                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add new course</button><button class="btn btn-primary" type="button">Erase this course</button></div>
+                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add New Course</button><button class="btn btn-primary" type="button">Erase This Course</button></div>
                     </section>
                     <div class="table-responsive">
                         <table class="table">
@@ -27,20 +27,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for course in courses %}
                                 <tr>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
+                                  <td>{{ loop.index }}</td>
+                                  <td>{{ course.courseid }}</td>
+                                  <td>{{ course.coursename }}</td>
+                                  <td>{{ course.teacherid }}</td>
+                                  <td>
+                                    {% if course.status == True %}
+                                      Active
+                                    {% else %}
+                                      Inactive
+                                    {% endif %}
+                                  </td>
                                 </tr>
-                                <tr>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                    <td>Cell 1</td>
-                                </tr>
+                              {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -53,21 +54,11 @@
             <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
                 <div class="card mb-5">
                     <div class="card-body p-sm-5">
-                        <h4 class="text-center mb-4">Course details</h4>
+                        <h4 class="text-center mb-4">Course Details</h4>
                         <section>
                             <form class="text-center" method="post">
-                                <div class="mb-3"><input class="form-control" type="text" name="courseid" placeholder="Course ID" /></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="coursename" placeholder="Course Name" /></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="status" placeholder="Status" /></div>
-                                <div class="d-flex"><input class="form-control" type="text"  placeholder="Role"/>
-                                    <div class="dropdown"><button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"></button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">Admin</a>
-                                            <a class="dropdown-item" href="#">Student</a>
-                                            <a class="dropdown-item" href="#">Teacher</a></div>
-                                    </div>
-                                </div>
                                 <div class="mb-3 d-flex justify-content-between mt-3">
                                     <button class="btn btn-primary d-block w-25">Save</button>
                                     <button class="btn btn-primary d-block w-25 cancel-btn" type="button">Cancel</button>
@@ -80,4 +71,17 @@
         </div>
     </div>
 </section>
+<form class="p-5" action="/course-management" method="post">
+    <h3>Add New Course</h3>
+    <div class="mb-3">
+      <input class="form-control" type="text" name="coursename" placeholder="Course-name" />
+    </div>
+    <div class="mb-3">
+      <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
+    </div>
+    <div class="mb-3">
+      <input type="hidden" name="action1" value="add" />
+      <button class="btn btn-primary d-block w-100" type="submit">Add Course</button>
+    </div>
+  </form>
 {% endblock %}

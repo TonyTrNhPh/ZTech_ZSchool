@@ -48,8 +48,25 @@ def render_template_student_profile():
 
 
 @app.route('/student-management')
-def render_template_student_management():
-    return render_template('student-management.html')
+def student_management():
+    students = dal.get_all_students()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                userid = request.form['userid']
+                fullname = request.form['fulname']
+                dateofbirth = request.form['dateofbirth']
+                gender = request.form['gender']
+                dal.add_student(userid,fullname,dateofbirth,gender)
+            case 'delete':
+                pass
+            case 'update':
+                pass
+        return render_template('student-management.html', students=students)
+
+    return render_template('student-management.html', students=students)
 
 
 @app.route('/teacher-management')
@@ -57,14 +74,45 @@ def render_template_teacher_management():
     return render_template('teacher-management.html')
 
 
-@app.route('/course-management')
-def render_template_course_management():
-    return render_template('course-management.html')
+@app.route('/course-management', methods=['GET','POST'])
+def course_management():
+    courses = dal.get_all_courses()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                coursename = request.form['coursename']
+                teacherid = request.form['teacherid']
+                dal.add_course(coursename, teacherid)
+            case 'delete':
+                pass
+            case 'update':
+                pass
+        return render_template('course-management.html', courses=courses)
+
+    return render_template('course-management.html', courses=courses)
 
 
 @app.route('/grade-management')
-def render_template_grade_management():
-    return render_template('grade-management.html')
+def grade_management():
+    grades = dal.get_all_grades()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                studentid = request.form['studentid']
+                courseid = request.form['courseid']
+                grade = request.form['grade']
+                dal.add_grade(studentid,courseid, grade)
+            case 'delete':
+                pass
+            case 'update':
+                pass
+        return render_template('grade-management.html', grades=grades)
+
+    return render_template('grade-management.html', grades=grades)
 
 
 @app.route('/announcement-management')

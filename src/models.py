@@ -9,6 +9,7 @@ def loader_user(user_id):
     return Users.query.get(user_id)
 
 
+
 class Users(db.Model, UserMixin):
     __tablename__ = 'users'
     userid = Column(Integer, primary_key=True)
@@ -46,6 +47,9 @@ class Teachers(db.Model):
     department = Column(String(20), nullable=False)
     status = Column(Boolean, default=True)
 
+# @lm.user_loader
+# def loader_course(course_id):
+#     return Users.query.get(course_id)
 
 class Courses(db.Model):
     __tablename__ = 'courses'
@@ -53,6 +57,13 @@ class Courses(db.Model):
     coursename = Column(String(20), nullable=False)
     teacherid = Column(Integer, ForeignKey(Teachers.teacherid), nullable=False)
     status = Column(Boolean, default=True)
+    # def __init__(self, coursename, teacherid):
+    #     self.coursename = coursename
+    #     self.teacherid = teacherid
+    #     self.status = True
+
+    # def get_id(self):
+    #     return (self.courseid)
 
 
 class Students(db.Model):
