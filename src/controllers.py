@@ -47,7 +47,7 @@ def render_template_student_profile():
     return render_template('student-profile.html')
 
 
-@app.route('/student-management')
+@app.route('/student-management', methods=['GET','POST'])
 def student_management():
     students = dal.get_all_students()
     if request.method == 'POST':
@@ -86,15 +86,19 @@ def course_management():
                 teacherid = request.form['teacherid']
                 dal.add_course(coursename, teacherid)
             case 'delete':
-                pass
+                courseid = request.form['courseid']
+                dal.delete_course(courseid)
             case 'update':
-                pass
+                courseid = request.form['courseid']
+                new_coursename = request.form['coursename']
+                new_teacherid = request.form['teacherid']
+                dal.update_course(courseid, new_coursename, new_teacherid)
         return render_template('course-management.html', courses=courses)
 
     return render_template('course-management.html', courses=courses)
 
 
-@app.route('/grade-management')
+@app.route('/grade-management', methods=['GET','POST'])
 def grade_management():
     grades = dal.get_all_grades()
     if request.method == 'POST':

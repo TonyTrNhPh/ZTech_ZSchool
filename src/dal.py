@@ -16,6 +16,20 @@ def add_course(coursename,teacherid):
     db.session.add(course)
     db.session.commit()
     
+def delete_course(courseid):
+    course = Courses.query.get(courseid)
+    if course:
+        db.session.delete(course)
+        db.session.commit()
+
+def update_course(courseid, new_coursename, new_teacherid):
+    course = Courses.query.get(courseid)
+    if course:
+        course.coursename = new_coursename
+        course.teacherid = new_teacherid
+        db.session.commit()
+
+    
 def get_all_students():
     return Students.query.all()
 
