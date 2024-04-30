@@ -56,7 +56,7 @@ def student_management():
         match action:
             case 'add':
                 userid = request.form['userid']
-                fullname = request.form['fulname']
+                fullname = request.form['fullname']
                 dateofbirth = request.form['dateofbirth']
                 gender = request.form['gender']
                 dal.add_student(userid,fullname,dateofbirth,gender)

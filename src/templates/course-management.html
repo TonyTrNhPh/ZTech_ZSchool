@@ -14,6 +14,7 @@
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewCourseBtn">Add New Course</button>
                             <button class="btn btn-primary" type="button" id="eraseCourseBtn">Erase This Course</button>
+                            <button class="btn btn-primary" type="button" id="refreshBtn">Refresh Table</button>
                         </div>
                     </section>
                     <div class="table-responsive">
@@ -110,6 +111,7 @@
         document.getElementById("cancelUpdateBtn").addEventListener("click", function() {
             // Ẩn form cập nhật
             document.getElementById("updateFormSection").style.display = "none";
+            document.getElementById("addForm").style.display = "none";
         });
 
         // Lắng nghe sự kiện click vào nút Add New Course
@@ -117,6 +119,7 @@
             // Ẩn form cập nhật nếu đang hiển thị
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
+            refreshTable();
         });
         
     });
@@ -163,17 +166,52 @@
                 } else {
                     alert("You can only delete courses with 'Active' status.");
                 }
+                refreshTable();
             });
         });
     });
 </script>
 
 
+<script>
+    function refreshTable() {
+        // Lấy lại dữ liệu mới từ máy chủ và cập nhật bảng
+        fetch('/course-management') // Thay thế bằng URL của để lấy lại dữ liệu mới
+            .then(response => response.json())
+            .then(data => {
+                // Xóa hết các hàng trong bảng
+                document.getElementById("courseTable").innerHTML = "";
 
-<form class="p-5" action="/course-management" method="post" id="addForm" style="display: none;">>
+                // Thêm lại các hàng mới từ dữ liệu lấy được
+                data.forEach(course => {
+                    const newRow = `
+                        <tr class="course-row">
+                            <td>${course.courseid}</td>
+                            <td>${course.coursename}</td>
+                            <td>${course.teacherid}</td>
+                            <td>${course.status ? "Active" : "Inactive"}</td>
+                            <td>
+                                ${course.status ? `<button class="btn btn-danger delete-btn">Delete</button>` : ""}
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById("courseTable").innerHTML += newRow;
+                });
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lắng nghe sự kiện click vào nút làm mới
+        document.getElementById("refreshBtn").addEventListener("click", function() {
+            refreshTable();
+        });
+    });
+</script>
+
+<form class="p-5" action="/course-management" method="post" id="addForm" style="display: none;">
     <h3>Add New Course</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="coursename" placeholder="Course-name" />
+      <input class="form-control" type="text" name="coursename" placeholder="Course Name" />
     </div>
     <div class="mb-3">
       <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
