@@ -31,7 +31,7 @@ def get_all_courses():
     return Courses.query.all()
 
 def add_course(coursename,teacherid):
-    course = Courses(coursename,teacherid)
+    course = Courses(coursename=coursename,teacherid=teacherid)
     db.session.add(course)
     db.session.commit()
     
@@ -53,7 +53,7 @@ def get_all_students():
     return Students.query.all()
 
 def add_student(userid,fullname,dateofbirth,gender):
-    student = Students(userid,fullname,dateofbirth,gender)
+    student = Students(userid=userid,fullname=fullname,dateofbirth=dateofbirth,gender=gender)
     db.session.add(student)
     db.session.commit()
 
@@ -61,6 +61,6 @@ def get_all_grades():
     return Grades.query.all()
 
 def add_grade(studentid,courseid, grade):
-    grade = Grades(studentid,courseid, grade)
+    grade = Grades(studentid=studentid,courseid=courseid, grade=grade)
     db.session.add(grade)
     db.session.commit()
