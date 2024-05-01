@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, session
 from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
@@ -13,8 +13,9 @@ def login():
         user = Users.query.filter_by(
             username=username, password=password).first()
         print(user)
-        if user:
+        if user and user.status == 1:
             login_user(user)
+            session["permission"]= user.usertype
             return redirect(url_for('index'))
         else:
             return render_template('login.html')
@@ -24,7 +25,8 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for("login"))
+    session.clear()
+    return redirect(url_for("index"))
 
 
 @app.route('/')
@@ -119,31 +121,47 @@ def grade_management():
     return render_template('grade-management.html', grades=grades)
 
 
-@app.route('/announcement-management')
-def render_template_announcement_management():
-    return render_template('announcement-management.html')
+@app.route('/announcements')
+def announcements():
+    return render_template('announcements.html')
 
 
 @app.route('/accounts', methods=['GET', 'POST'])
 def accounts():
-    users = dal.get_all_users()
+    users = dal.get_active_users()
+    message = None
     if request.method == 'POST':
-        action = request.form['action2']
+        action = request.form['hanhdong']
         print(action)
+        
         match action:
-            case 'add':
-                username = request.form['username']
-                password = request.form['password']
-                usertype = request.form['usertype']
-                dal.add_user(username, password, usertype)
+            case 'create':
+                username = request.form['usernameCreate']
+                if not dal.get_user(username):
+                    password = 123456
+                    usertype = request.form['usertypeCreate']
+                    if usertype != None:
+                        dal.add_user(username, password, usertype)
+                    else:
+                        session['message'] = "Empty role"
+                else:
+                    session['message'] = "Username already exists"
             case 'delete':
-                pass
+                userid = request.form['useridUpdate']
+                dal.delete_user(userid)
             case 'update':
-                pass
-
-        return render_template('user-management.html', users=users)
-
-    return render_template('user-management.html', users=users)
+                userid = request.form['useridUpdate']
+                password = request.form['passwordUpdate']
+                usertype = request.form['usertypeUpdate']
+                dal.update_user(userid, password, usertype)
+        
+        return redirect(url_for('accounts'))
+    if session.get('message'):
+        message = session['message']
+        session['message'] = None
+    else:
+        message = None
+    return render_template('accounts.html', users=users, message=message)
 
 
 @app.route('/teacher-profile')

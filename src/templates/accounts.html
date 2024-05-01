@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% block content %}
+  <section class="p-5">
+    <h3>Accounts Management</h3>
+    <div>
+      <div class="tab-content border border-1">
+        <section class="p-5">
+          <section class="d-flex justify-content-sm-between mb-3">
+            <h4>
+              {% if (users|length) == 1 %}
+                There is 1 user
+              {% else %}
+                There are {{ users|length }} users
+              {% endif %}
+            </h4>
+            <div class="btn-group gap-3" role="group">
+              <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalCreate" onclick="resetData({{flag}})">Create new</button>
+            </div>
+          </section>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>User ID</th>
+                  <th>Username</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                  {%if user.status == 1%}
+                  <tr ondblclick="loadData('{{ user.userid }}', '{{ user.username }}','{{user.password}}', '{{ user.usertype }}')">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.userid }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.usertype }}</td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <!-- Create modal section -->
+  <section class="py-4 py-xl-5">
+    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">User details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="text-center" method="post">
+              <div class="mb-3">
+                <input id="useridCreate" class="form-control" type="text" name="useridCreate" placeholder="Userid" disabled />
+              </div>
+              <div class="mb-3">
+                <input id="usernameCreate" class="form-control" type="text" name="usernameCreate" placeholder="Username" required />
+              </div>
+              <div class="mb-3 d-flex">
+                <input id="passwordCreate" class="form-control" type="text" name="passwordCreate" placeholder="******" disabled />
+              </div>
+              <div class="d-flex">
+                <input id="roleCreate" class="form-control" type="text" name="usertypeCreate" placeholder="Role" required readonly/>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" name="usertype" value="Quản trị viên" onclick="setRole('Quản trị viên')">Quản trị viên</a>
+                    <a class="dropdown-item" name="usertype" value="Sinh viên" onclick="setRole('Sinh viên')">Sinh viên</a>
+                    <a class="dropdown-item" name="usertype" value="Giáo viên" onclick="setRole('Giáo viên')">Giáo viên</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 d-flex justify-content-between mt-3">
+                <button class="btn btn-primary d-block w-25" type="submit"><input type="hidden" name="hanhdong" value="create" />Create</button>
+                <button class="btn btn-primary d-block w-25 cancel-btn" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Update modal section -->
+  <section class="py-4 py-xl-5">
+    <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">User details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="text-center" method="post" id="updateForm">
+              <div class="mb-3">
+                <input id="useridUpdate" class="form-control" type="text" name="useridUpdate" placeholder="Userid" value="" readonly/>
+              </div>
+              <div class="mb-3">
+                <input id="usernameUpdate" class="form-control" type="text" name="usernameUpdate" placeholder="Username" value="" readonly/>
+              </div>
+              <div class="mb-3 d-flex">
+                <input id="passwordUpdate" class="form-control" type="password" name="passwordUpdate" placeholder="******" value="" readonly />
+                <button class="btn btn-primary" type="button" onclick="resetPassword('123456')"><i class="fa-solid fa-arrow-rotate-left fa-2xs"></i></button>
+              </div>
+              <div class="d-flex">
+                <input id="roleUpdate" class="form-control" type="text" name="usertypeUpdate" placeholder="Role"  readonly/>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" aria-expanded="false" data-bs-toggle="dropdown" type="button"></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" name="usertype" value="Quản trị viên" onclick="setRole('Quản trị viên')">Quản trị viên</a>
+                    <a class="dropdown-item" name="usertype" value="Sinh viên" onclick="setRole('Sinh viên')">Sinh viên</a>
+                    <a class="dropdown-item" name="usertype" value="Giáo viên" onclick="setRole('Giáo viên')">Giáo viên</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3 d-flex justify-content-between mt-3">
+                <input id="actionInp"type="hidden" name="hanhdong" />
+                <button class="btn btn-primary d-block w-25 btnAction" type="submit" data-type="update"="">Update</button>
+                <button class="btn btn-primary d-block w-25 btnAction" type="submit" data-type="delete">Delete</button>
+                <button class="btn btn-primary d-block w-25 cancel-btn" data-bs-dismiss="modal">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% if message %}
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-delay="3000">
+      <div class="d-flex">
+        <div class="toast-body">
+        {{message}}
+      </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <script>
+
+    let btnActions = document.querySelectorAll(".btnAction");
+    let actionInp = document.getElementById('actionInp')
+    console.log("test")
+    for(i=0; i<btnActions.length; i++) {
+      let button = btnActions[i];
+      button.addEventListener("click", e => {
+        actionInp.value = button.dataset.type;
+        document.getElementById('updateForm').submit();
+      });
+    }
+
+    function setRole(role) {
+      document.getElementById('roleCreate').placeholder = role
+      document.getElementById('roleCreate').value = role
+      document.getElementById('roleUpdate').placeholder = role
+      document.getElementById('roleUpdate').value = role
+    }
+    
+    function loadData(userid, username, password, usertype) {
+      document.getElementById('useridUpdate').value = userid
+      document.getElementById('usernameUpdate').value = username
+      document.getElementById('passwordUpdate').value = password
+      document.getElementById('roleUpdate').value = usertype
+      $('#modalUpdate').modal('show');
+      console.log(userid)
+    }
+
+    function resetPassword(password) {
+      document.getElementById('passwordUpdate').value = password;
+      document.getElementById('passwordUpdate').placeholder = "******";
+    }
+    
+  </script>
+{% endblock %}

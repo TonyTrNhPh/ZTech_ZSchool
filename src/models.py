@@ -15,7 +15,7 @@ class Users(db.Model, UserMixin):
     userid = Column(Integer, primary_key=True)
     username = Column(String(20), unique=True, nullable=False)
     password = Column(String(20), nullable=False)
-    usertype = Column(String(10), nullable=False)
+    usertype = Column(String(20), nullable=False)
     status = Column(Boolean, default=True)
     announcement = relationship('Announcements', backref='users', lazy=True)
 

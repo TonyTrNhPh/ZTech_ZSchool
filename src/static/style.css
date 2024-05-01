@@ -3,10 +3,17 @@
     margin: 0;
     padding: 0;
 }
+
+
+
 .h-rem-12{
     height: 12rem;
 }
-
+.dropdown-menu a:hover{
+    background-color: #46a4ec !important;
+    color: white !important;
+    cursor: pointer;
+}
 .i-cus:hover{
     transition: 0.2s ease-in-out;
     color: #74c0fc;
@@ -24,6 +31,7 @@
 .nav-item:hover{
     background-color: #74c0fc;
     border-radius: 20px;
+    color: white !important;
 }
 button{
     background-color: #74c0fc !important;
@@ -37,15 +45,28 @@ button:hover{
 
 .cancel-btn{
     background-color: white !important;
-    color: black !important;;
     border: none !important;
     box-shadow: none !important;
+    color:#1491f1 !important;
     border-radius: 0;
-    border-bottom: 2px solid black !important;
-
+    border-bottom: 2px solid #74c0fc !important;
+}
+.cancel-btn:hover{
+    background-color: #74c0fc !important;
+    color: white !important;;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 8px;
+    border-bottom: 2px solid #74c0fc !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .tab-title:hover{
     background-color: #74c0fc !important;
 }   
 
+tr:hover td{
+    cursor: pointer;
+    background-color: #74c0fc !important;
+    color: white !important;
+}

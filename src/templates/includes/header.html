@@ -11,38 +11,42 @@
     <div id="navcol-1" class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto gap-2">
         <li class="nav-item">
-          <a class="nav-link" href="/index">Home</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/news">News</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/grades">Grades</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/student-profile">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/student-management">Students</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/teacher-management">Teachers</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/course-management">Courses</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/grade-management">Grades</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/announcement-management">Announcement</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/accounts">Accounts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/teacher-profile">Profile</a>
-        </li>
+        {% if session['permission'] == 'Sinh viên'%}
+          <li class="nav-item">
+            <a class="nav-link" href="/grades">Grades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/student-profile">Profile</a>
+          </li>
+        {% elif session['permission'] == 'Giáo viên'%}
+          <li class="nav-item">
+            <a class="nav-link" href="/grade-management">Grades</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/teacher-profile">Profile</a>
+          </li>
+        {% elif session['permission'] == 'Quản trị viên'%}
+          <li class="nav-item">
+            <a class="nav-link" href="/student-management">Students</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/teacher-management">Teachers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/course-management">Courses</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/announcements">Announcements</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts">Accounts</a>
+          </li>
+        {% endif %}
       </ul>
       {% if current_user.is_authenticated %}
         <a href="/logout"><button class="btn btn-primary mt-md-0 mt-3 btn-cus" type="button">Log out</button></a>
