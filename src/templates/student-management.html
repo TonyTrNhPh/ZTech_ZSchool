@@ -11,10 +11,13 @@
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
                         <h4>Student list ("number")</h4>
-                        <div class="btn-group gap-3" role="group"><button class="btn btn-primary" type="button">Add New Student</button><button class="btn btn-primary" type="button">Erase This Student</button></div>
+                        <div class="btn-group gap-3" role="group">
+                            <button class="btn btn-primary" type="button" id="addNewStudentBtn">Add New Student</button>
+                            <button class="btn btn-primary" type="button" id="refreshBtn" onclick="window.location.href='/student-management'">Refresh Table</button>
+                        </div>
                     </section>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="courseTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -29,7 +32,7 @@
                             </thead>
                             <tbody>
                                 {% for student in students %}
-                                <tr>
+                                <tr class="student-row">
                                   <td>{{ loop.index }}</td>
                                   <td>{{ student.studentid }}</td>
                                   <td>{{ student.userid }}</td>
@@ -43,6 +46,11 @@
                                       Inactive
                                     {% endif %}
                                   </td>
+                                  <td>
+                                    {% if student.status == True %}
+                                    <button class="btn btn-danger delete-btn" id ="deleteBtn">Delete</button>
+                                    {% endif %}
+                                </td>
                                 </tr>
                               {% endfor %}
                             </tbody>
@@ -51,7 +59,7 @@
                 </section>
             </div>
             
-<section class="py-4 py-xl-5" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<section class="py-4 py-xl-5" id="updateFormSection" style="display: none;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="container">
         <div class="row d-flex justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
@@ -59,12 +67,16 @@
                     <div class="card-body p-sm-5">
                         <h4 class="text-center mb-4">Student Details</h4>
                         <section>
-                            <form class="text-center" method="post">
-                                <div class="mb-3"><input class="form-control" type="text" name="userid" placeholder="User ID" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="fullname" placeholder="Full Name" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="dateofbirth" placeholder="Date Of Birth" /></div>
-                                <div class="mb-3"><input class="form-control" type="password" name="gender" placeholder="Gender" /></div>
-                                <div class="mb-3 d-flex justify-content-between mt-3"><button class="btn btn-primary d-block w-25">Save</button><button class="btn btn-primary d-block w-25 cancel-btn" type="button">Cancel</button></div>
+                            <form class="text-center" method="post" id="updateForm">
+                                <div class="mb-3"><input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="Full Name" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="gender" id="genderIP" placeholder="Gender" /></div>
+                                <div class="mb-3 d-flex justify-content-between mt-3">
+                                    <input type="hidden" name="action1" id="actionInput" value="update">
+                                    <input type="hidden" name="studentid" id="studentIDInput">
+                                    <button class="btn btn-primary d-block w-25" type="submit" id = "saveBtn">Save</button>
+                                    <button class="btn btn-primary d-block w-25 cancel-btn" type="button" id="cancelUpdateBtn">Cancel</button></div>
                             </form>
                         </section>
                     </div>
@@ -73,19 +85,141 @@
         </div>
     </div>
 </section>
-<form class="p-5" action="/student-management" method="post">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lắng nghe sự kiện click vào một hàng trong bảng
+        document.querySelectorAll(".student-row").forEach(function(row) {
+            row.addEventListener("click", function() {
+                // Lấy dữ liệu từ hàng được chọn
+                var cells = row.getElementsByTagName("td");
+                var studentid = cells[1].innerText;
+                var userid = cells[2].innerText;
+                var fullname = cells[3].innerText;
+                var dateofbirth = cells[4].innerText;
+                var gender = cells[5].innerText;
+
+
+                // Điền dữ liệu vào form cập nhật
+                document.getElementById("studentIDInput").value = studentid;
+                document.getElementById("useridIP").value = userid;
+                document.getElementById("fullnameIP").value = fullname;
+                document.getElementById("dateofbirthIP").value = dateofbirth;
+                document.getElementById("genderIP").value = gender;
+
+
+                // Hiển thị form cập nhật
+                document.getElementById("updateFormSection").style.display = "block";
+
+                document.getElementById("addForm").style.display = "none";
+            });
+        });
+
+        // Lắng nghe sự kiện click vào nút Cancel
+        document.getElementById("cancelUpdateBtn").addEventListener("click", function() {
+            // Ẩn form cập nhật
+            document.getElementById("updateFormSection").style.display = "none";
+            document.getElementById("addForm").style.display = "none";
+        });
+
+        // Lắng nghe sự kiện click vào nút Add New Student
+        document.getElementById("addNewStudentBtn").addEventListener("click", function() {
+            // Ẩn form cập nhật nếu đang hiển thị
+            document.getElementById("updateFormSection").style.display = "none";
+            document.getElementById("addForm").style.display = "block";
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lắng nghe sự kiện click vào nút Delete
+        document.querySelectorAll(".delete-btn").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                // Lấy dữ liệu từ hàng chứa nút Delete
+                var row = btn.closest("tr");
+                var cells = row.getElementsByTagName("td");
+                var studentid = cells[1].innerText;
+                var status = cells[6].innerText.trim().toLowerCase();
+
+                // Kiểm tra điều kiện về status
+                if (status === "active") {
+                    // Hiển thị hộp thoại xác nhận trước khi xóa
+                    if (confirm("Are you sure you want to delete this student?")) {
+                        // Tạo một form ẩn để gửi yêu cầu xóa
+                        var form = document.createElement("form");
+                        form.method = "POST";
+                        form.action = "/student-management";
+                        form.style.display = "none";
+
+                        // Thêm input chứa action và studentid vào form
+                        var actionInput = document.createElement("input");
+                        actionInput.type = "hidden";
+                        actionInput.name = "action1";
+                        actionInput.value = "delete";
+                        form.appendChild(actionInput);
+
+                        var studentIdInput = document.createElement("input");
+                        studentIdInput.type = "hidden";
+                        studentIdInput.name = "studentid";
+                        studentIdInput.value = studentid;
+                        form.appendChild(studentIdInput);
+
+                        // Thêm form vào body và submit nó
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                } else {
+                    alert("You can only delete student with 'Active' status.");
+                }
+            }); 
+        });
+    });
+</script>
+
+
+<script>
+    function validateForm() {
+        var userid = document.getElementById("useridIP").value.trim();
+        var fullname = document.getElementById("fullnameIP").value.trim();
+        var dateofbirth = document.getElementById("dateofbirthIP").value.trim();
+        var gender = document.getElementById("genderIP").value.trim();
+    
+        var errorMessage = "";
+    
+        if (userid === "") {
+            errorMessage += "Please enter User ID.\n";
+        }
+        if (fullname === "") {
+            errorMessage += "Please enter Full Name.\n";
+        }
+        if (dateofbirth === "") {
+            errorMessage += "Please enter Date of Birth.\n";
+        }
+        if (gender === "") {
+            errorMessage += "Please select Gender.\n";
+        }
+    
+        if (errorMessage !== "") {
+            alert(errorMessage);
+            return false;
+        }
+        return true;
+    }
+    
+</script>
+<form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;" onsubmit="return validateForm()">
     <h3>Add New Student</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="userid" placeholder="User ID" />
+      <input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" />
     </div>
     <div class="mb-3">
-      <input class="form-control" type="text" name="fullname" placeholder="FullName" />
+      <input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="FullName" />
     </div>
     <div class="mb-3">
-        <input class="form-control" type="text" name="dateofbirth" placeholder="Date Of Birth" />
+        <input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" />
     </div>
     <div class="mb-3">
-        <input class="form-control" type="text" name="gender" placeholder="Gender" />
+        <input class="form-control" type="text" name="gender" id="gender" placeholder="Gender" />
     </div>
     <div class="mb-3">
       <input type="hidden" name="action1" value="add" />

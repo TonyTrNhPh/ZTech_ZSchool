@@ -239,14 +239,17 @@ CREATE TABLE `course_feedback` (
 --
 
 LOCK TABLES `course_feedback` WRITE;
-/*!40000 ALTER TABLE `course_documents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `course_documents` ENABLE KEYS */;
+/*!40000 ALTER TABLE `course_feedback` DISABLE KEYS */;
+/*!40000 ALTER TABLE `course_feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
 -- Table structure for table `attendance`
 --
 
+DROP TABLE IF EXISTS `attendance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `attendance` (
   `AttendanceID` INT(11) NOT NULL AUTO_INCREMENT,
   `CourseID` INT(11) NOT NULL,
@@ -256,7 +259,7 @@ CREATE TABLE `attendance` (
   KEY `CourseID` (`CourseID`),
   CONSTRAINT `fk_attendance_course` FOREIGN KEY (`CourseID`)
         REFERENCES `courses` (`CourseID`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8MB4 COLLATE = UTF8MB4_GENERAL_CI;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -63,9 +63,15 @@ def student_management():
                 gender = request.form['gender']
                 dal.add_student(userid,fullname,dateofbirth,gender)
             case 'delete':
-                pass
+                studentid = request.form['studentid']
+                dal.delete_student(studentid)
             case 'update':
-                pass
+                studentid = request.form['studentid']
+                new_userid = request.form['userid']
+                new_fullname = request.form['fullname']
+                new_dateofbirth = request.form['dateofbirth']
+                new_gender = request.form['gender']
+                dal.update_student(studentid,new_userid,new_fullname,new_dateofbirth,new_gender)
         return render_template('student-management.html', students=students)
 
     return render_template('student-management.html', students=students)
@@ -113,9 +119,14 @@ def grade_management():
                 grade = request.form['grade']
                 dal.add_grade(studentid,courseid, grade)
             case 'delete':
-                pass
+                gradeid = request.form['gradeid']
+                dal.delete_grade(gradeid)
             case 'update':
-                pass
+                gradeid = request.form['gradeid']
+                new_studentid = request.form['studentid']
+                new_courseid = request.form['courseid']
+                new_grade = request.form['grade']
+                dal.update_grade(gradeid,new_studentid,new_courseid,new_grade)
         return render_template('grade-management.html', grades=grades)
 
     return render_template('grade-management.html', grades=grades)
