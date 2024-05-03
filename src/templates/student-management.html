@@ -126,6 +126,16 @@
             // Ẩn form cập nhật nếu đang hiển thị
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
+            // Gắn sự kiện submit cho form mới
+            document.getElementById("addForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+                // Thực hiện hàm validateForm() khi form được submit
+                if (validateForm()) {
+                    // Nếu hợp lệ, tiến hành submit form
+                    this.submit();
+                }
+            });
         });
     });
 </script>
@@ -207,7 +217,7 @@
     }
     
 </script>
-<form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;" onsubmit="return validateForm()">
+<form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;">
     <h3>Add New Student</h3>
     <div class="mb-3">
       <input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" />
