@@ -16,6 +16,12 @@
         <li class="nav-item">
           <a class="nav-link" href="/news">News</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/course_feedback">Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/attendance">Attendance</a>
+        </li>
         {% if session['permission'] == 'Sinh viên'%}
           <li class="nav-item">
             <a class="nav-link" href="/grades">Grades</a>
@@ -29,6 +35,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/teacher-profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/course_documents">Document</a>
           </li>
         {% elif session['permission'] == 'Quản trị viên'%}
           <li class="nav-item">

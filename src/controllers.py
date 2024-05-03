@@ -178,3 +178,79 @@ def accounts():
 @app.route('/teacher-profile')
 def render_template_teacher_profile():
     return render_template('teacher-profile.html')
+
+@app.route('/course_documents', methods=['GET','POST'])
+def course_documents():
+    documents = dal.get_all_document()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                docname = request.form['documentname']
+                supplier = request.form['supplier']
+                year = request.form['year']
+                courseid = request.form['courseid']
+                dal.add_doc( docname, supplier, year, courseid)
+            case 'delete':
+                docid = request.form['documentid']
+                dal.delete_doc(docid)
+            case 'update':
+                docid = request.form['documentid']
+                new_docname = request.form['documentname']
+                new_year = request.form['year']
+                new_courseid = request.form['courseid'] 
+                dal.update_doc(docid, new_docname, new_year, new_courseid)
+        return render_template('course_documents.html', documents=documents)
+
+    return render_template('course_documents.html', documents=documents)
+
+@app.route('/course_feedback', methods=['GET','POST'])
+def course_feedback():
+    feedbacks = dal.get_all_feedback()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                courseid = request.form['courseid']
+                rating = request.form['rating']
+                comment = request.form['comment']
+                dal.add_feedback(courseid, rating, comment)
+            case 'delete':
+                feedbackid = request.form['feedbackid']
+                dal.delete_feedback(feedbackid)
+            case 'update':
+                feedbackid = request.form['feedbackid']
+                new_courseid = request.form['courseid']
+                new_rating = request.form['rating']
+                new_comment = request.form['comment']
+                dal.update_feedback(feedbackid, new_courseid, new_rating, new_comment)
+        return render_template('course_feedback.html', feedbacks=feedbacks)
+
+    return render_template('course_feedback.html', feedbacks=feedbacks)
+
+@app.route('/attendance', methods=['GET','POST'])
+def attendance():
+    attendances = dal.get_all_attendance()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                courseid = request.form['courseid']
+                date = request.form['date']
+                status = request.form['status']
+                dal.add_attendance(courseid, date, status)
+            case 'delete':
+                attendanceid = request.form['attendanceid']
+                dal.delete_attendance(attendanceid)
+            case 'update':
+                attendanceid = request.form['attendanceid']
+                new_courseid = request.form['courseid']
+                new_date = request.form['date']
+                new_status = request.form['status']
+                dal.update_feedback(attendanceid, new_courseid, new_date, new_status)
+        return render_template('attendance.html', attendances=attendances)
+
+    return render_template('course_feedback.html', attendances=attendances)
