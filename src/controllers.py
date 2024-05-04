@@ -39,15 +39,16 @@ def render_template_news():
     return render_template('news.html')
 
 
-@app.route('/grades')
+@app.route('/grades', methods=['GET','POST'])
 def grades():
     grades = dal.get_all_grades()
     return render_template('grades.html', grades=grades)
 
 
-@app.route('/student-profile')
-def render_template_student_profile():
-    return render_template('student-profile.html')
+@app.route('/student-profile', methods=['GET','POST'])
+def student():
+    students = dal.get_all_students()
+    return render_template('student-profile.html', students=students)
 
 
 @app.route('/student-management', methods=['GET','POST'])
@@ -78,7 +79,7 @@ def student_management():
     return render_template('student-management.html', students=students)
 
 
-@app.route('/teacher-management')
+@app.route('/teacher-management', methods=['GET','POST'])
 def teacher_management():
     teachers = dal.get_all_teachers()
     if request.method == 'POST':
