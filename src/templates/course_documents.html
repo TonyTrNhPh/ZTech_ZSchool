@@ -10,7 +10,11 @@
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Document list ("number")</h4>
+                        <h4>{% if (documents|length) == 1 %}
+                            There is 1 document
+                          {% else %}
+                            There are {{ documents|length }} documents
+                          {% endif %}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewDocumentBtn">Add New Document</button>
                             <!-- <button class="btn btn-primary" type="button" id="eraseDocumentBtn">Erase This Document</button>
@@ -219,5 +223,18 @@
       <button class="btn btn-primary d-block w-100" type="submit">Add Feedback</button>
     </div>
   </form>
-  
+
+  {% if message %}
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+      <div class="toast align-items-center show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" data-bs-delay="3000">
+          <div class="d-flex">
+          <div class="toast-body">
+          {{message}}
+          </div>
+          <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+      </div>
+  </div>
+  {% endif %}  
+
 {% endblock %}
