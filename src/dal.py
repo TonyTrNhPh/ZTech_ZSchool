@@ -119,6 +119,10 @@ def update_doc(documentid, new_docname, new_supplier, new_year, new_courseid):
 def get_all_feedback():
     return Course_feedback.query.all()  
 
+def get_courseid(courseid):
+    print(Courses.query.filter_by(courseid=courseid).first())
+    return Courses.query.filter_by(courseid=courseid).first()
+
 def add_feedback( courseid, rating, comment):
     feedback = Course_feedback( courseid=courseid, rating=rating, comment=comment)
     db.session.add(feedback)

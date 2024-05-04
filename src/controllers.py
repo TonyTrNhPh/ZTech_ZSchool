@@ -3,7 +3,7 @@ from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
 from src import dal
-
+import re
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -191,19 +191,42 @@ def course_documents():
                 supplier = request.form['supplier']
                 year = request.form['year']
                 courseid = request.form['courseid']
-                dal.add_doc( docname, supplier, year, courseid)
+
+                if not courseid or not supplier or not docname or not year:
+                    session['message'] = "Empty role"
+                elif len(year) != 4 or not year.isdigit():
+                    session['message'] = "Year must be a 4-digit number"
+                else:
+                    if dal.get_courseid(courseid):    
+                        dal.add_doc(docname, supplier, year, courseid)
+                    else:
+                        session['message'] = "Course ID does not exist"  
             case 'delete':
                 docid = request.form['documentid']
                 dal.delete_doc(docid)
             case 'update':
                 docid = request.form['documentid']
                 new_docname = request.form['documentname']
+                new_supplier = request.form['supplier']
                 new_year = request.form['year']
-                new_courseid = request.form['courseid'] 
-                dal.update_doc(docid, new_docname, new_year, new_courseid)
-        return render_template('course_documents.html', documents=documents)
-
-    return render_template('course_documents.html', documents=documents)
+                new_courseid = request.form['courseid']
+                if not new_docname or not new_year or not new_courseid or not new_supplier:
+                    session['message'] = "Empty role"
+                elif len(new_year) != 4 or not new_year.isdigit():
+                    session['message'] = "Year must be a 4-digit number"
+                else:
+                    if dal.get_courseid(courseid):    
+                        dal.update_doc(docid, new_docname,new_supplier, new_year, new_courseid)
+                    else:
+                        session['message'] = "Course ID does not exist" 
+                
+        return redirect(url_for('course_documents'))
+    if session.get('message'):
+        message = session['message']
+        session['message'] = None
+    else:
+        message = None
+    return render_template('course_documents.html', documents=documents, message=message)
 
 @app.route('/course_feedback', methods=['GET','POST'])
 def course_feedback():
@@ -215,8 +238,16 @@ def course_feedback():
             case 'add':
                 courseid = request.form['courseid']
                 rating = request.form['rating']
-                comment = request.form['comment']
-                dal.add_feedback(courseid, rating, comment)
+                comment = request.form['comment'] 
+                if not courseid or not rating or not comment:
+                    session['message'] = "Empty role"
+                elif int(rating) > 5:
+                    session['message'] = "Rating must be less than 5"
+                else:
+                    if dal.get_courseid(courseid):    
+                        dal.add_feedback(courseid, rating, comment)
+                    else:
+                        session['message'] = "Course ID does not exist"    
             case 'delete':
                 feedbackid = request.form['feedbackid']
                 dal.delete_feedback(feedbackid)
@@ -225,10 +256,22 @@ def course_feedback():
                 new_courseid = request.form['courseid']
                 new_rating = request.form['rating']
                 new_comment = request.form['comment']
-                dal.update_feedback(feedbackid, new_courseid, new_rating, new_comment)
-        return render_template('course_feedback.html', feedbacks=feedbacks)
-
-    return render_template('course_feedback.html', feedbacks=feedbacks)
+                if not new_courseid.strip() or not new_rating.strip() or not new_comment.strip():
+                    session['message'] = "Empty role"
+                elif int(new_rating) > 5:
+                    session['message'] = "Rating must be less than 5"
+                else:
+                    if dal.get_courseid(new_courseid):
+                        dal.update_feedback(feedbackid, new_courseid, new_rating, new_comment)
+                    else:
+                        session['message'] = "Course ID does not exist"    
+        return redirect(url_for('course_feedback'))
+    if session.get('message'):
+        message = session['message']
+        session['message'] = None
+    else:
+        message = None
+    return render_template('course_feedback.html', feedbacks=feedbacks, message=message)
 
 @app.route('/attendance', methods=['GET','POST'])
 def attendance():
@@ -241,7 +284,17 @@ def attendance():
                 courseid = request.form['courseid']
                 date = request.form['date']
                 status = request.form['status']
-                dal.add_attendance(courseid, date, status)
+                if not courseid or not date or not status:
+                    session['message'] = "Empty role"
+                else:
+                    date_pattern = re.compile(r"\d{4}/\d{2}/\d{2}")
+                    if not date_pattern.match(date):
+                        session['message'] = "Date must be in yyyy/mm/dd format"    
+                    else:
+                        if dal.get_courseid(courseid):
+                            dal.add_attendance(courseid, date, status)
+                        else:
+                            session['message'] = "Course ID does not exist"
             case 'delete':
                 attendanceid = request.form['attendanceid']
                 dal.delete_attendance(attendanceid)
@@ -250,7 +303,22 @@ def attendance():
                 new_courseid = request.form['courseid']
                 new_date = request.form['date']
                 new_status = request.form['status']
-                dal.update_feedback(attendanceid, new_courseid, new_date, new_status)
-        return render_template('attendance.html', attendances=attendances)
-
-    return render_template('course_feedback.html', attendances=attendances)
+                if not new_courseid or not new_date or not new_status:
+                    session['message'] = "Empty role"
+                else:
+                    date_pattern = re.compile(r"\d{4}/\d{2}/\d{2}")
+                    if not date_pattern.match(new_date):
+                        session['message'] = "Date must be in yyyy/mm/dd format"    
+                    else:
+                        if dal.get_courseid(new_courseid):
+                            dal.update_attendance(attendanceid, new_courseid, new_date, new_status)
+                        else:
+                            session['message'] = "Course ID does not exist"
+                
+        return redirect(url_for('attendance'))
+    if session.get('message'):
+        message = session['message']
+        session['message'] = None
+    else:
+        message = None
+    return render_template('attendance.html', attendances=attendances, message=message)
