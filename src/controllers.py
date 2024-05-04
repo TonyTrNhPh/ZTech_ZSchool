@@ -40,8 +40,9 @@ def render_template_news():
 
 
 @app.route('/grades')
-def render_template_grades():
-    return render_template('grades.html')
+def grades():
+    grades = dal.get_all_grades()
+    return render_template('grades.html', grades=grades)
 
 
 @app.route('/student-profile')
@@ -78,9 +79,32 @@ def student_management():
 
 
 @app.route('/teacher-management')
-def render_template_teacher_management():
-    return render_template('teacher-management.html')
-
+def teacher_management():
+    teachers = dal.get_all_teachers()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                teacherid = request.form['teacherid']
+                userid = request.form['userid']
+                fullname = request.form['fullname']
+                department = request.form['department']
+                status = request.form['status']
+                dal.add_teacher(teacherid,userid,fullname,department,status)
+            case 'delete':
+                teacherid = request.form['teacherid']
+                dal.delete_teacher(teacherid)
+            case 'update':
+                teacherid = request.form['teacherid']
+                new_userid = request.form['userid']
+                new_fullname = request.form['fullname']
+                new_department = request.form['department']
+                new_status = request.form['status']
+                dal.update_teacher(teacherid,new_userid,new_fullname,new_department,new_status)
+        return redirect(url_for('teacher-management.html'))
+    
+    return render_template('teacher-management.html', teachers=teachers)
 
 @app.route('/course-management', methods=['GET','POST'])
 def course_management():
