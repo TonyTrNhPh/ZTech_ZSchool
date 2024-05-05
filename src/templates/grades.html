@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="p-5">
+    <h3>Grades</h3>
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="tab-title" role="presentation"><a class="nav-link active" role="tab" data-bs-toggle="tab" href="#tab-1">All Grades</a></li>
+        </ul>
+        <div class="tab-content border border-1">
+            <div id="tab-1" class="tab-pane active" role="tabpanel">
+                <section class="p-5">
+                  <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Grade ID</th>
+                                <th>Student ID</th>
+                                <th>Course ID</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in grades %}
+                            <tr>
+                              <td>{{ loop.index }}</td>
+                              <td>{{ grade.gradeid }}</td>
+                              <td>{{ grade.studentid }}</td>
+                              <td>{{ grade.courseid }}</td>
+                              <td>{{ grade.grade }}</td>
+                              <td>
+                                {% if grade.status == True %}
+                                  Active
+                                {% else %}
+                                  Inactive
+                                {% endif %}
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                    </table>
+                  </div>
+                </section>
+            </div>
+</section>
+
+{% endblock %}

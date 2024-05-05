@@ -88,3 +88,26 @@ class Grades(db.Model):
     courseid = Column(Integer, ForeignKey(Courses.courseid), nullable=False)
     grade = Column(Float, nullable=False)
     status = Column(Boolean, default=True)
+
+class Course_documents(db.Model):
+    __tablename__ = 'course_documents'
+    documentid = Column(Integer, primary_key=True)
+    documentname = Column(String(20), nullable=False)
+    supplier = Column(String(20), nullable=False)
+    year = Column(Integer, nullable=False)
+    courseid = Column(Integer, ForeignKey(Courses.courseid), nullable=False)
+
+class Course_feedback(db.Model):
+    __tablename__ = "course_feedback"
+    feedbackid = Column(Integer, primary_key=True)
+    courseid = Column(Integer, ForeignKey(Courses.courseid),nullable=False)
+    rating = Column(Integer, nullable=False)
+    comment = Column(String(100), nullable=False)
+
+
+class Attendance(db.Model):
+    __tablename__ = "attendance"
+    attendanceid = Column(Integer, primary_key=True)
+    courseid = Column(Integer, ForeignKey(Courses.courseid),nullable=False)
+    date = Column(String(20), nullable=False)
+    status = Column(String(20), nullable=False)

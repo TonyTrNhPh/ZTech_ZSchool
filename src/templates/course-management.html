@@ -13,8 +13,7 @@
                         <h4>Course list ("number")</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewCourseBtn">Add New Course</button>
-                            <button class="btn btn-primary" type="button" id="eraseCourseBtn">Erase This Course</button>
-                            <button class="btn btn-primary" type="button" id="refreshBtn">Refresh Table</button>
+                            <button class="btn btn-primary" type="button" id="refreshBtn" onclick="window.location.href='/course-management'">Refresh Table</button>
                         </div>
                     </section>
                     <div class="table-responsive">
@@ -44,7 +43,7 @@
                                     </td>
                                     <td>
                                         {% if course.status == True %}
-                                        <button class="btn btn-danger delete-btn">Delete</button>
+                                        <button class="btn btn-danger delete-btn" id ="deleteBtn">Delete</button>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -72,7 +71,7 @@
                                 <div class="mb-3 d-flex justify-content-between mt-3">
                                     <input type="hidden" name="action1" id="actionInput" value="update">
                                     <input type="hidden" name="courseid" id="courseIdInput">
-                                    <button class="btn btn-primary d-block w-25" type="submit">Save</button>
+                                    <button class="btn btn-primary d-block w-25" type="submit" id = "saveBtn">Save</button>
                                     <button class="btn btn-primary d-block w-25 cancel-btn" type="button" id="cancelUpdateBtn">Cancel</button>
                                 </div>
                             </form>
@@ -119,9 +118,17 @@
             // Ẩn form cập nhật nếu đang hiển thị
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
-            refreshTable();
+            // Gắn sự kiện submit cho form mới
+            document.getElementById("addForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+                // Thực hiện hàm validateForm() khi form được submit
+                if (validateForm()) {
+                    // Nếu hợp lệ, tiến hành submit form
+                    this.submit();
+                }
+            });
         });
-        
     });
 </script>
 
@@ -166,55 +173,41 @@
                 } else {
                     alert("You can only delete courses with 'Active' status.");
                 }
-                refreshTable();
-            });
+            }); 
         });
     });
 </script>
-
-
 <script>
-    function refreshTable() {
-        // Lấy lại dữ liệu mới từ máy chủ và cập nhật bảng
-        fetch('/course-management') // Thay thế bằng URL của để lấy lại dữ liệu mới
-            .then(response => response.json())
-            .then(data => {
-                // Xóa hết các hàng trong bảng
-                document.getElementById("courseTable").innerHTML = "";
-
-                // Thêm lại các hàng mới từ dữ liệu lấy được
-                data.forEach(course => {
-                    const newRow = `
-                        <tr class="course-row">
-                            <td>${course.courseid}</td>
-                            <td>${course.coursename}</td>
-                            <td>${course.teacherid}</td>
-                            <td>${course.status ? "Active" : "Inactive"}</td>
-                            <td>
-                                ${course.status ? `<button class="btn btn-danger delete-btn">Delete</button>` : ""}
-                            </td>
-                        </tr>
-                    `;
-                    document.getElementById("courseTable").innerHTML += newRow;
-                });
-            });
+    function validateForm() {
+        var courseNameInput = document.getElementById("courseNameInput");
+        var teacherIdInput = document.getElementById("teacherIdInput");
+        var courseName = courseNameInput.value.trim();
+        var teacherId = teacherIdInput.value.trim();
+    
+        if (courseName === "") {
+            alert("Please enter a course name.");
+            courseNameInput.focus();
+            return false;
+        }
+    
+        if (teacherId === "") {
+            alert("Please enter a teacher ID.");
+            teacherIdInput.focus();
+            return false;
+        }
+    
+        return true;
     }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lắng nghe sự kiện click vào nút làm mới
-        document.getElementById("refreshBtn").addEventListener("click", function() {
-            refreshTable();
-        });
-    });
+    
 </script>
 
 <form class="p-5" action="/course-management" method="post" id="addForm" style="display: none;">
     <h3>Add New Course</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="coursename" placeholder="Course Name" />
+      <input class="form-control" type="text" name="coursename" id= "nameadd" placeholder="Course Name" />
     </div>
     <div class="mb-3">
-      <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
+      <input class="form-control" type="text" name="teacherid"  id= "teacheridadd" placeholder="Teacher ID" />
     </div>
     <div class="mb-3">
       <input type="hidden" name="action1" value="add" />
