@@ -90,8 +90,7 @@ def teacher_management():
                 userid = request.form['userid']
                 fullname = request.form['fullname']
                 department = request.form['department']
-                status = request.form['status']
-                dal.add_teacher(teacherid,userid,fullname,department,status)
+                dal.add_teacher(teacherid,userid,fullname,department)
             case 'delete':
                 teacherid = request.form['teacherid']
                 dal.delete_teacher(teacherid)

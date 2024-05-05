@@ -172,8 +172,8 @@ def update_attendance(attendanceid, new_courseid, new_date, new_status):
 def get_all_teachers():
     return Teachers.query.all()
 
-def add_teacher(teacherid,userid,fullname,department,status):
-    teacher = Teachers(teacherid,userid,fullname,department,status)
+def add_teacher(teacherid,userid,fullname,department):
+    teacher = Teachers(teacherid=teacherid,userid=userid,fullname=fullname,department=department)
     db.session.add(teacher)
     db.session.commit()
     
