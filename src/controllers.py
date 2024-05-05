@@ -46,7 +46,7 @@ def grades():
 
 @app.route('/student-profile', methods=['GET','POST'])
 def student():
-    students = dal.get_all_students()
+    students = dal.get_student()
     return render_template('student-profile.html', students=students)
 
 
@@ -197,9 +197,30 @@ def accounts():
     return render_template('accounts.html', users=users, message=message)
 
 
-@app.route('/teacher-profile')
-def render_template_teacher_profile():
-    return render_template('teacher-profile.html')
+@app.route('/teacher-profile', methods=['GET', 'POST'])
+def teacher():
+    teachers = dal.get_teacher()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'add':
+                teacherid = request.form['teacherid']
+                userid = request.form['userid']
+                fullname = request.form['fullname']
+                department = request.form['department']
+                dal.add_teacher(teacherid,userid,fullname,department)
+            case 'delete':
+                teacherid = request.form['teacherid']
+                dal.delete_teacher(teacherid)
+            case 'update':
+                teacherid = request.form['teacherid']
+                new_fullname = request.form['fullname']
+                new_department = request.form['department']
+                dal.update_teacher1(teacherid,new_fullname,new_department)
+        return redirect(url_for('teacher'))
+    
+    return render_template('teacher-profile.html', teachers=teachers)
 
 @app.route('/course_documents', methods=['GET','POST'])
 def course_documents():

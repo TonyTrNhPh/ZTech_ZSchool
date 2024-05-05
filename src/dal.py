@@ -1,4 +1,5 @@
 from src import db
+from flask_login import current_user
 from src.models import Users, Courses, Students, Grades, Course_documents, Course_feedback, Attendance,Teachers
 def get_active_users():
     return Users.query.filter_by(status=1).all()
@@ -51,8 +52,10 @@ def update_course(courseid, new_coursename, new_teacherid):
 def get_all_students():
     return Students.query.all()
 
-def get_student(userid):
-    return Students.query.filter_by(userid).first()
+def get_student():
+    if current_user.is_authenticated:
+        userid = current_user.userid
+    return Students.query.filter_by(userid=userid).all()
 
 def add_student(userid,fullname,dateofbirth,gender):
     student = Students(userid=userid,fullname=fullname,dateofbirth=dateofbirth,gender=gender)
@@ -190,3 +193,15 @@ def update_teacher(teacherid,new_userid,new_fullname,new_department):
         teacher.fullname = new_fullname
         teacher.department = new_department
         db.session.commit()
+        
+def update_teacher1(teacherid,new_fullname,new_department):
+    teacher =  Teachers.query.get(teacherid)
+    if teacher:
+        teacher.fullname = new_fullname
+        teacher.department = new_department
+        db.session.commit()
+        
+def get_teacher():
+    if current_user.is_authenticated:
+        userid = current_user.userid
+    return Teachers.query.filter_by(userid=userid).all()
