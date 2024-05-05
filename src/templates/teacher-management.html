@@ -10,7 +10,11 @@
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Teacher list ("number")</h4>
+                        <h4>{% if (teachers|length) == 1 %}
+                            There is 1 teacher
+                          {% else %}
+                            There are {{ teachers|length }} teachers
+                          {% endif %}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewTeacherbtn">Add new</button>
                             <button class="btn btn-primary" type="button" id="eraseTeacherbtn">Erase this</button>
@@ -154,7 +158,7 @@
                         // Tạo một form ẩn để gửi yêu cầu xóa
                         var form = document.createElement("form");
                         form.method = "POST";
-                        form.action = "/course-management";
+                        form.action = "/teacher-management";
                         form.style.display = "none";
 
                         // Thêm input chứa action và courseid vào form
@@ -164,10 +168,10 @@
                         actionInput.value = "delete";
                         form.appendChild(actionInput);
 
-                        var courseIdInput = document.createElement("input");
-                        courseIdInput.type = "hidden";
-                        courseIdInput.name = "teacherid";
-                        courseIdInput.value = teacherId;
+                        var teacherIdInput = document.createElement("input");
+                        teacherIdInput.type = "hidden";
+                        teacherIdInput.name = "teacherid";
+                        teacherIdInput.value = teacherId;
                         form.appendChild(teacherIdInput);
 
                         // Thêm form vào body và submit nó
@@ -222,10 +226,19 @@
 <form class="p-5" action="/teacher-management" method="post" id="addForm" style="display: none;">
     <h3>Add New Teacher</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="fullName" placeholder="Full Name" />
+      <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
     </div>  
     <div class="mb-3">
-      <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
+        <input class="form-control" type="text" name="userid" placeholder="User ID" />
+      </div>
+      <div class="mb-3">
+        <input class="form-control" type="text" name="fullName" placeholder="Full Name" />
+      </div>
+      <div class="mb-3">
+        <input class="form-control" type="text" name="department" placeholder="Department" />
+      </div>
+    <div class="mb-3">
+      <input class="form-control" type="text" name="status" placeholder="Status" />
     </div>
     <div class="mb-3">
       <input type="hidden" name="action1" value="add" />

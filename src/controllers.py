@@ -28,7 +28,6 @@ def logout():
     session.clear()
     return redirect(url_for("index"))
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -101,9 +100,8 @@ def teacher_management():
                 new_userid = request.form['userid']
                 new_fullname = request.form['fullname']
                 new_department = request.form['department']
-                new_status = request.form['status']
-                dal.update_teacher(teacherid,new_userid,new_fullname,new_department,new_status)
-        return redirect(url_for('teacher-management.html'))
+                dal.update_teacher(teacherid,new_userid,new_fullname,new_department)
+        return redirect(url_for('teacher_management'))
     
     return render_template('teacher-management.html', teachers=teachers)
 
