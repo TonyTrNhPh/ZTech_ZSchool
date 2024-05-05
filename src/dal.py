@@ -1,11 +1,10 @@
 from src import db
 from flask_login import current_user
-from src.models import Users, Courses, Students, Grades, Course_documents, Course_feedback, Attendance,Teachers
+from src.models import Users, Courses, Students, Grades, Course_feedback, Course_documents, Attendance, Teachers, Announcements
 def get_active_users():
     return Users.query.filter_by(status=1).all()
 
 def get_user(username):
-    print(Users.query.filter_by(username=username).first())
     return Users.query.filter_by(username=username).first()
 
 def add_user(username, password, usertype):
@@ -19,7 +18,6 @@ def delete_user(userid):
         user.status = 0
         db.session.commit()   
 
-    
 def update_user(userid, new_password, new_usertype):
     user = Users.query.get(userid)
     print(user)
@@ -28,8 +26,47 @@ def update_user(userid, new_password, new_usertype):
         user.password = new_password
         db.session.commit()
 
+def change_password(userid, new_password):
+    user = Users.query.get(userid)
+    if user:
+        print("cung dc cai j")
+        user.password = new_password
+        db.session.commit()
+    
+        
+################################  Announcements Management #############################
+def get_active_announcements():
+    return Announcements.query.filter_by(status=1).all()
+
+def get_announcement_details(announcementid):
+    return Announcements.query.filter_by(announcementid=announcementid).first()
+
+def add_announcement(userid,title, description,who,date):
+    announcement = Announcements(userid,title, description,who,date)
+    db.session.add(announcement)
+    db.session.commit()           
+    
+def update_announcement(announcementid,userid,new_title, new_description,who,date,published):
+    announcement = Announcements.query.get(announcementid)
+    print(announcement)
+    if announcement:
+        announcement.userid = userid
+        announcement.title = new_title
+        announcement.description = new_description
+        announcement.who = who
+        announcement.date = date
+        announcement.published = published
+        db.session.commit()
+        
+def delete_announcement(announcementid):
+    announcement = Announcements.query.get(announcementid)
+    if announcement:
+        announcement.status = 0
+        db.session.commit() 
+
+################################ Course Management ################################
 def get_all_courses():
-    return Courses.query.all()
+    return Courses.query.all
 
 def add_course(coursename,teacherid):
     course = Courses(coursename=coursename,teacherid=teacherid)
