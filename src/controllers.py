@@ -3,10 +3,36 @@ from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
 from flask_login import login_user, logout_user, login_required, current_user
 from src import dal
+from datetime import datetime
+
+def limit_words(s, n):
+    words = s.split()
+    return ' '.join(words[:n])
+
+app.jinja_env.filters['limit_words'] = limit_words
+
+@app.route('/changepassword', methods=['POST'])
+def change_password():
+    print("dong 16")
+    userid = current_user.userid
+    my_password = current_user.password
+    old_password = request.form['old_password']
+    new_password = request.form['new_password']
+    confirm_password = request.form['confirm_password']
+    if my_password != old_password:
+        session['message'] = "Passwords do not match"
+    else:
+        if new_password != confirm_password:
+            session['message'] = "Confirm your password again"
+        else:
+            dal.change_password(userid, new_password)
+            session['message'] = "Your password has been changed"
+    return redirect(request.referrer)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    message = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -18,8 +44,13 @@ def login():
             session["permission"]= user.usertype
             return redirect(url_for('index'))
         else:
-            return render_template('login.html')
-    return render_template('login.html')
+            session['message'] = "Invalid username or password"
+    if session.get('message'):
+        message = session['message']
+        session['message'] = None
+    else:
+        message = None
+    return render_template('login.html', message=message)
 
 
 @app.route('/logout')
@@ -34,9 +65,15 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/news')
-def render_template_news():
-    return render_template('news.html')
+@app.route('/news', methods=['GET'])
+def news():
+    announcements = dal.get_active_announcements()
+    return render_template('news.html', announcements=announcements)
+
+@app.route('/announcements/<int:announcement_id>')
+def announcement_details(announcement_id):
+    announcement = dal.get_announcement_details(announcement_id)  
+    return render_template('new_details.html', announcement=announcement)
 
 
 @app.route('/grades')
@@ -121,10 +158,43 @@ def grade_management():
     return render_template('grade-management.html', grades=grades)
 
 
-@app.route('/announcements')
+@app.route('/announcements', methods=['GET', 'POST'])
 def announcements():
-    return render_template('announcements.html')
+    announcements = dal.get_active_announcements()
+    message = None
+    if request.method == 'POST':
+        action = request.form['hanhdong']
+        match action:
+            case 'create':
+                userid = current_user.userid
+                title = request.form['titleCreate']
+                description = request.form['descriptionCreate']
+                who = request.form['whoCreate']
+                date = datetime.now()
+                print(userid, title, description, who, date)
+                dal.add_announcement(userid,title, description,who,date)
+            case 'delete':
+                announcementid = request.form['announcementidUpdate']
+                dal.delete_announcement(announcementid)
+            case 'update':
+                announcementid = request.form['announcementidUpdate']
+                userid = current_user.userid
+                new_title = request.form['titleUpdate']
+                new_description = request.form['descriptionUpdate']
+                who = request.form['whoUpdate']
+                published = int(request.form['publishedUpdate'])
+                date = request.form['dateUpdate']
+                dal.update_announcement(announcementid,userid,new_title, new_description,who,date,published)
+        return redirect(url_for('announcements'))
+    return render_template('announcements.html', announcements=announcements, message=message)
 
+# @app.route('/announcements/editor')
+# def edit_announcement():
+#     content = None
+#     if content == None:
+#         return render_template('editor.html')
+#     else:
+#         return announcements(content=content)
 
 @app.route('/accounts', methods=['GET', 'POST'])
 def accounts():
@@ -133,7 +203,6 @@ def accounts():
     if request.method == 'POST':
         action = request.form['hanhdong']
         print(action)
-        
         match action:
             case 'create':
                 username = request.form['usernameCreate']

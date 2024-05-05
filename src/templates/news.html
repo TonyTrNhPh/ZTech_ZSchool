@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="p-5">
+    <h5>News</h5>
+    <div>
+      <div class="tab-content border border-1">
+        <section class="p-5">
+          <div class="container">
+            <div class="row">
+                {% for announ in announcements %}
+                    {% if announ.published == 1 %}
+                        {% if announ.who == "Tất cả" or current_user.usertype == "Quản trị viên" or announ.who == current_user.usertype %}
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <a href="/announcements/{{announ.announcementid}}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ announ.title|limit_words(10) }}</h5>
+                                            <p class="card-text">{{ announ.description|limit_words(10) }}</p>
+                                            <p class="card-text">Posted by: {{ announ.userid }}</p>
+                                            <p class="card-text"><small class="text-muted">Published on: {{ announ.date }}</small></p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+{% endblock %}

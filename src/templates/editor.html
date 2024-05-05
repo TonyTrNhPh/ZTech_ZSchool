@@ -1,0 +1,86 @@
+{% block content %}
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="./styles.css" />
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" rel="stylesheet" />
+      <title>ZTech_ZSchool</title>
+    </head>
+    <body>
+      <div id="editor">
+        <!-- Cái khúc này là data -->
+      </div>
+      <div class="mb-3 d-flex justify-content-end gap-5">
+        <button class="btn btn-primary d-block w-25" onclick="showContent()">Show content</button>
+        <button class="btn btn-primary d-block w-25"><a href="/announcements" class="nav-link">Save</a></button>
+        <button class="btn btn-primary d-block w-25 cancel-btn" type="button">Cancel</button>
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.js"></script>
+      <script>
+        let quill = new Quill('#editor', {
+          modules: {
+            toolbar: [['bold', 'italic', 'underline', 'strike'], [{ color: [] }, { background: [] }], [{ align: [] }], ['link'], [{ size: ['small', 'medium', 'large'] }]]
+          },
+          theme: 'snow'
+        })
+        
+        function showContent() {
+          const content = quill.getContents();
+          let formattedText = '';
+        
+          content.ops.forEach((op, index) => {
+            if (op.insert) {
+              if (op.attributes && Object.keys(op.attributes).length > 0) {
+                formattedText += applyFormatting(op.attributes, op.insert);
+              } else {
+                formattedText += op.insert;
+              }
+            }
+          });
+        
+          console.log(formattedText);
+          console.log(content);
+        }
+        
+        function applyFormatting(attributes, text) {
+          let formattedText = text
+          if (attributes.link) {
+            formattedText = '<a href="' + attributes.link + '">' + formattedText + '</a>'
+          }
+          if (attributes.bold) {
+            formattedText = '<b>' + formattedText + '</b>'
+          }
+          if (attributes.italic) {
+            formattedText = '<i>' + formattedText + '</i>'
+          }
+          if (attributes.underline) {
+            formattedText = '<u>' + formattedText + '</u>'
+          }
+          if (attributes.strike) {
+            formattedText = '<s>' + formattedText + '</s>'
+          }
+          if (attributes.color) {
+            formattedText = '<span style="color:' + attributes.color + '">' + formattedText + '</span>'
+          }
+          if (attributes.background) {
+            formattedText = '<span style="background-color:' + attributes.background + '">' + formattedText + '</span>'
+          }
+          if (attributes.align) {
+            formattedText = '<div style="text-align:' + attributes.align + '">' + formattedText + '</div>'
+          }
+          if (attributes.size) {
+            let size = attributes.size
+            if (size === 'small' || size === 'medium' || size === 'large') {
+              formattedText = '<span style="font-size:' + size + '">' + formattedText + '</span>'
+            }
+          }
+          return formattedText
+        }
+      </script>
+    </body>
+  </html>
+{% endblock %}
