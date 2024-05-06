@@ -12,12 +12,11 @@ def create_tables():
 if __name__ == '__main__':
     create_tables()
     with app.app_context():
-        # Create a new data instance
-        # example_user = Users(
-        #     username='admin',
-        #     password='123',
-        #     usertype='Quản trị viên',
-        # )
+        example_user = Users(
+            username='admin',
+            password='123',
+            usertype='Quản trị viên',
+        )
         
         example_announcement = Announcements(
             userid = '1',
@@ -34,11 +33,21 @@ if __name__ == '__main__':
             status = True,            
         )
         
-        db.session.add(example_course)
-        db.session.commit()        
+        example_student = Students(
+            studentid = '1',
+            userid = '4',
+            fullname = 'tuan',
+            dateofbirth = '2000-01-01',
+            gender = 'Nam',
+            status = True,
+        )
+        
+        
         # Add the data to the database
         # db.session.add(example_user)
         # db.session.add(example_announcement)
-        # db.session.commit()
+        # db.session.add(example_course)    
+        db.session.add(example_student)
+        db.session.commit()
 
 
