@@ -85,6 +85,17 @@ def grades():
 @app.route('/student-profile', methods=['GET','POST'])
 def student():
     students = dal.get_student()
+    if request.method == 'POST':
+        action = request.form['action1']
+        print(action)
+        match action:
+            case 'update':
+                studentid = request.form['studentid']
+                new_fullname = request.form['fullname']
+                new_dateofbirth = request.form['dateofbirth']
+                new_gender = request.form['gender']
+                dal.update_student1(studentid,new_fullname,new_dateofbirth,new_gender)
+        return redirect(url_for('student'))
     return render_template('student-profile.html', students=students)
 
 
@@ -265,15 +276,6 @@ def teacher():
         action = request.form['action1']
         print(action)
         match action:
-            case 'add':
-                teacherid = request.form['teacherid']
-                userid = request.form['userid']
-                fullname = request.form['fullname']
-                department = request.form['department']
-                dal.add_teacher(teacherid,userid,fullname,department)
-            case 'delete':
-                teacherid = request.form['teacherid']
-                dal.delete_teacher(teacherid)
             case 'update':
                 teacherid = request.form['teacherid']
                 new_fullname = request.form['fullname']
