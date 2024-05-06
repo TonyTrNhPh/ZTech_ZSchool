@@ -34,7 +34,7 @@
               <tbody>
                 {% for announ in announcements %}
                   {% if announ.status == 1 %}
-                    <tr ondblclick="loadData('{{ announ.announcementid }}', '{{ announ.userid }}', '{{ announ.title }}', '{{ announ.description|replace('\n', '<br>') }}', '{{ announ.date }}', '{{ announ.who }}', '{{ announ.published }}')">
+                    <tr ondblclick="loadData('{{ announ.announcementid }}', '{{ announ.userid }}', '{{ announ.title }}', '{{ announ.description}}', '{{ announ.date }}', '{{ announ.who }}', '{{ announ.published}}')">
                       <td>{{ loop.index }}</td>
                       <td>{{ announ.announcementid }}</td>
                       <td>{{ announ.userid }}</td>
@@ -137,7 +137,7 @@
                 <input type="radio" class="btn-check" name="publishedUpdate" id="btnradio1" value="1" autocomplete="off"/>
                 <label class="btn btn-outline-primary" for="btnradio1">Publish</label>
               
-                <input type="radio" class="btn-check" name="publishedUpdate" id="btnradio2" value="0" autocomplete="off"/>
+                <input type="radio" class="btn-check" name="publishedUpdate" id="btnradio2" value="0" autocomplete="off" />
                 <label class="btn btn-outline-primary" for="btnradio2">Not yet</label>
               </div>
               <div class="mb-3 d-flex justify-content-between mt-3">
@@ -194,15 +194,17 @@
       document.getElementById('descriptionUpdate').value = description
       document.getElementById('whoUpdate').value = who
       document.getElementById('dateUpdate').value = date
-      if (published == 1) {
-        document.getElementById('btnradio1').checked = true
-        document.getElementById('btnradio2').checked = false
+      console.log(published)
+      if (published.toLowerCase() === "true") {
+        console.log("true");
+        document.getElementById('btnradio1').checked = true;
+        document.getElementById('btnradio2').checked = false;
       } else {
-        document.getElementById('btnradio2').checked = true
-        document.getElementById('btnradio1').checked = false
+        console.log("false");
+        document.getElementById('btnradio2').checked = true;
+        document.getElementById('btnradio1').checked = false;
       }
-      $('#modalUpdate').modal('show')
-      console.log(userid)
+      $('#modalUpdate').modal('show');
     }
   </script>
 {% endblock %}

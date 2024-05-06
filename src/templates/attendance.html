@@ -17,8 +17,6 @@
                           {% endif %}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewAttendanceBtn">Add New Attendance</button>
-                            <!-- <button class="btn btn-primary" type="button" id="eraseAttendanceBtn">Erase This Attendance</button>
-                            <button class="btn btn-primary" type="button" id="refreshBtn">Refresh Table</button> -->
                         </div>
                     </section>
                     <div class="table-responsive">
@@ -29,17 +27,15 @@
                                     <th>Attendance ID</th>
                                     <th>Course ID</th>
                                     <th>Date</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for attendance in attendances %}
-                                <tr class="feedback-row">
+                                <tr class="attendance-row">
                                     <td>{{ loop.index }}</td>
-                                    <td>{{ attendance.feedbackid }}</td>
+                                    <td>{{ attendance.attendanceid }}</td>
                                     <td>{{ attendance.courseid }}</td>
                                     <td>{{ attendance.date }}</td>
-                                    <td>{{ attendance.status }}</td>
                                     <td>
                                         <button class="btn btn-danger delete-btn">Delete</button>
                                     </td>
@@ -65,7 +61,6 @@
                             <form class="text-center" method="post" id="updateForm">
                                 <div class="mb-3"><input class="form-control" type="text" name="courseid" id="courseIdInput" placeholder="Course ID" /></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="date" id="dateInput" placeholder="Date" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="status" id="statusInput" placeholder="Status" /></div>
                                 <div class="mb-3 d-flex justify-content-between mt-3">
                                     <input type="hidden" name="action1" id="actionInput" value="update">
                                     <input type="hidden" name="attendanceid" id="attendanceIdInput">
@@ -91,13 +86,11 @@
                 var attendanceId = cells[1].innerText;
                 var courseId = cells[2].innerText;
                 var date = cells[3].innerText;
-                var status = cells[4].innerText
 
                 // Điền dữ liệu vào form cập nhật
                 document.getElementById("attendanceIdInput").value = attendanceId;
                 document.getElementById("courseIdInput").value = courseId;
                 document.getElementById("dateInput").value = date;
-                document.getElementById("statusInput").value = status;
 
                 // Hiển thị form cập nhật
                 document.getElementById("updateFormSection").style.display = "block";
@@ -166,38 +159,6 @@
 </script>
 
 
-<script>
-    function refreshTable() {
-        // Lấy lại dữ liệu mới từ máy chủ và cập nhật bảng
-        fetch('/attendance') // Thay thế bằng URL của để lấy lại dữ liệu mới
-            .then(response => response.json())
-            .then(data => {
-                // Xóa hết các hàng trong bảng
-                document.getElementById("attendanceTable").innerHTML = "";
-
-                // Thêm lại các hàng mới từ dữ liệu lấy được
-                data.forEach(attendance => {
-                    const newRow = `
-                        <tr class="attendance-row">
-                            <td>${attendance.attendanceid}</td>
-                            <td>${attendance.courseid}</td>
-                            <td>${attendance.date}</td>
-                            <td>${attendance.status}</td>
-                        </tr>
-                    `;
-                    document.getElementById("attendanceTable").innerHTML += newRow;
-                });
-            });
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lắng nghe sự kiện click vào nút làm mới
-        document.getElementById("refreshBtn").addEventListener("click", function() {
-            refreshTable();
-        });
-    });
-</script>
-
 <form class="p-5" action="/attendance" method="post" id="addForm" style="display: none;">
     <h3>Add New Attendance</h3>
     <div class="mb-3">
@@ -205,9 +166,6 @@
     </div>
     <div class="mb-3">
       <input class="form-control" type="text" name="date" placeholder="Date" />
-    </div>
-    <div class="mb-3">
-        <input class="form-control" type="text" name="status" placeholder="Status" />
     </div>
     <div class="mb-3">
       <input type="hidden" name="action1" value="add" />

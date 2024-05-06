@@ -9,16 +9,12 @@
                         <h4 class="text-center mb-4">Teacher profile</h4>
                         <section>
                             <form class="text-center" method="post" id="updateForm">
-                                <div class="mb-3"><input class="form-control" type="text" name="teacherid" id ="teacherIdInput" placeholder="Teacher ID" disabled="disabled" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="userid" id="userIdInput" placeholder="User ID" disabled="disabled" /></div> 
-                                <div class="mb-3"><input class="form-control" type="text" name="fullname" id="fullnameInput" placeholder="Fullname" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="department" id="departmentInput" placeholder="Department" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="status" id="statusInput" placeholder="Status" disabled="disabled" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="teacherid" id ="teacherIdInput" placeholder="{{teacher_profile.teacherid}}" value="{{teacher_profile.teacherid}}" disabled="disabled" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="userid" id="userIdInput" placeholder="{{teacher_profile.userid}}" value="{{teacher_profile.userid}}" disabled="disabled" /></div> 
+                                <div class="mb-3"><input class="form-control" type="text" name="fullname" id="fullnameInput" placeholder="{{teacher_profile.fullname}}" value="{{teacher_profile.fullname}}" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="department" id="departmentInput" placeholder="{{teacher_profile.department}}" value="{{teacher_profile.department}}" /></div>
                                 <div class="mb-3 d-flex justify-content-between mt-3">
-                                    <input type="hidden" name="action1" id="actionInput" value="update">
-                                    <input type="hidden" name="teacherid" id="teacherIdInput">
                                     <button class="btn btn-primary d-block w-25" type="submit">Save</button>
-                                    <button class="btn btn-primary d-block w-25 cancel-btn" type="button" id="cancelUpdateBtn">Cancel</button>
                                 </div>
                             </form>
                         </section>
@@ -28,88 +24,4 @@
         </div>
     </div>
 </section>
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lắng nghe sự kiện click vào một hàng trong bảng
-        document.querySelectorAll(".teacher-row").forEach(function(row) {
-            row.addEventListener("click", function() {
-                // Lấy dữ liệu từ hàng được chọn
-                var cells = row.getElementsByTagName("td");
-                var teacherId = cells[1].innerText;
-                var userID = cells[2].innerText;
-                var fullName = cells[3].innerText;
-                var Department = cells[4].innerText; 
-                var Status = cells[5].innerText
-
-                // Điền dữ liệu vào form cập nhật
-                document.getElementById("teacherIdInput").value = teacherId;
-                document.getElementById("userIdInput").value = userID;
-                document.getElementById("fullnameInput").value = fullName;
-                document.getElementById("departmentInput").value = Department;
-                document.getElementById("statusInput").value = Status;
-
-                // Hiển thị form cập nhật
-                document.getElementById("updateFormSection").style.display = "block";
-
-                document.getElementById("addForm").style.display = "none";
-            });
-        });
-
-        // Lắng nghe sự kiện click vào nút Cancel
-        document.getElementById("cancelUpdateBtn").addEventListener("click", function() {
-            // Ẩn form cập nhật
-            document.getElementById("updateFormSection").style.display = "none";
-            document.getElementById("addForm").style.display = "none";
-        });
-
-        // Lắng nghe sự kiện click vào nút Add New Teacher
-        document.getElementById("addNewTeacherbtn").addEventListener("click", function() {
-            // Ẩn form cập nhật nếu đang hiển thị
-            document.getElementById("updateFormSection").style.display = "none";
-            document.getElementById("addForm").style.display = "block";
-            refreshTable();
-        });
-        
-    });
-</script>
-
-<script>
-    function refreshTable() {
-        // Lấy lại dữ liệu mới từ máy chủ và cập nhật bảng
-        fetch('/teacher-management') // Thay thế bằng URL của để lấy lại dữ liệu mới
-            .then(response => response.json())
-            .then(data => {
-                // Xóa hết các hàng trong bảng
-                document.getElementById("teacherTable").innerHTML = "";
-
-                // Thêm lại các hàng mới từ dữ liệu lấy được
-                data.forEach(teacher => {
-                    const newRow = `
-                        <tr class="course-row">
-                            <td>${teacher.teacherid}</td>
-                            <td>${teacher.userid}</td>
-                            <td>${teacher.fullname}</td>
-                            <td>${teacher.department}</td>
-                            <td>${teacher.status ? "Active" : "Inactive"}</td>
-                            <td>
-                                ${teacher.status ? `<button class="btn btn-danger delete-btn">Delete</button>` : ""}
-                            </td>
-                        </tr>
-                    `;
-                    document.getElementById("teacherTable").innerHTML += newRow;
-                });
-            });
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        // Lắng nghe sự kiện click vào nút làm mới
-        document.getElementById("refreshBtn").addEventListener("click", function() {
-            refreshTable();
-        });
-    });
-</script>
-
-
 {% endblock %}

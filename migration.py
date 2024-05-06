@@ -27,27 +27,18 @@ if __name__ == '__main__':
         )
         
         example_course = Courses(
-            courseid = '1',
             coursename = 'Test',
-            teacherid = '1',
+            teacherid = '2',
             status = True,            
         )
-        
-        example_student = Students(
-            studentid = '1',
-            userid = '4',
-            fullname = 'tuan',
-            dateofbirth = '2000-01-01',
-            gender = 'Nam',
-            status = True,
-        )
+    
         
         
         # Add the data to the database
         # db.session.add(example_user)
         # db.session.add(example_announcement)
-        # db.session.add(example_course)    
-        db.session.add(example_student)
+        db.session.add(example_course)    
+        # db.session.add(example_student)
         db.session.commit()
 
 

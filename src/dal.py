@@ -95,6 +95,9 @@ def get_student():
         userid = current_user.userid
     return Students.query.filter_by(userid=userid).all()
 
+def get_student_details(userid):
+    return Students.query.filter_by(userid=userid).first()
+
 def add_student(fullname,dateofbirth,gender):
     user = Users(username='',password=dateofbirth,usertype='Sinh viên')
     db.session.add(user)
@@ -104,8 +107,6 @@ def add_student(fullname,dateofbirth,gender):
     db.session.flush()
     user.username = student.studentid
     db.session.commit()
-    
-    
     
 def delete_student(studentid):
     student = Students.query.get(studentid)
@@ -117,6 +118,14 @@ def delete_student(studentid):
 
 def update_student(studentid,new_fullname,new_dateofbirth,new_gender):
     student = Students.query.get(studentid)
+    if student:
+        student.fullname = new_fullname
+        student.dateofbirth = new_dateofbirth
+        student.gender = new_gender
+        db.session.commit()
+        
+def update_student_profile(userid,new_fullname,new_dateofbirth,new_gender):
+    student =  Students.query.filter_by(userid=userid).first()
     if student:
         student.fullname = new_fullname
         student.dateofbirth = new_dateofbirth
@@ -220,6 +229,9 @@ def update_attendance(attendanceid, new_courseid, new_date, new_status):
 def get_all_teachers():
     return Teachers.query.all()
 
+def get_teacher_details(userid):
+    return Teachers.query.filter_by(userid=userid).first()
+
 def add_teacher(fullname,department):
     user = Users(username='',password=department,usertype='Giáo viên')
     db.session.add(user)
@@ -244,8 +256,8 @@ def update_teacher(teacherid,new_userid,new_fullname,new_department):
         teacher.department = new_department
         db.session.commit()
         
-def update_teacher1(teacherid,new_fullname,new_department):
-    teacher =  Teachers.query.get(teacherid)
+def update_teacher_profile(userid,new_fullname,new_department):
+    teacher =  Teachers.query.filter_by(userid=userid).first()
     if teacher:
         teacher.fullname = new_fullname
         teacher.department = new_department

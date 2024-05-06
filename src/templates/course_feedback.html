@@ -10,11 +10,14 @@
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>{% if (feedbacks|length) == 1 %}
+                        <h4>
+                        {% if (feedbacks|length) == 0 %}
+                            There is no feedback
+                        {% elif (feedbacks|length) == 1 %}
                             There is 1 feedback
-                          {% else %}
+                        {% else %}
                             There are {{ feedbacks|length }} feedbacks
-                          {% endif %}</h4>
+                        {% endif %}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewFeedbackBtn">Add New Feedback</button>
                             <!-- <button class="btn btn-primary" type="button" id="eraseFeedbackBtn">Erase This Feedback</button>
