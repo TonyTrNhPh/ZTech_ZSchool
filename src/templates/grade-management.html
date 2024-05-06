@@ -10,7 +10,7 @@
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Grade list ("number")</h4>
+                        <h4>Grade list {{grades|length}}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewGradeBtn">Add New Grade</button>
                             <button class="btn btn-primary" type="button" id="refreshBtn" onclick="window.location.href='/grade-management'">Refresh Table</button>
@@ -25,7 +25,6 @@
                                     <th>Student ID</th>
                                     <th>Course ID</th>
                                     <th>Grade</th>
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,13 +35,6 @@
                                   <td>{{ grade.studentid }}</td>
                                   <td>{{ grade.courseid }}</td>
                                   <td>{{ grade.grade }}</td>
-                                    <td>
-                                    {% if grade.status == True %}
-                                      Active
-                                    {% else %}
-                                      Inactive
-                                    {% endif %}
-                                    </td>
                                     <td>
                                         {% if grade.status == True %}
                                         <button class="btn btn-danger delete-btn" id ="deleteBtn">Delete</button>
@@ -87,6 +79,7 @@
     </div>
 </section>
 
+<!-- Event table -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Lắng nghe sự kiện click vào một hàng trong bảng
@@ -138,6 +131,7 @@
     });
 </script>
 
+<!-- Event delete -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Lắng nghe sự kiện click vào nút Delete
@@ -185,6 +179,7 @@
 </script>
 
 
+<!-- validateForm -->
 <script>
     function validateForm() {
         var studentid = document.getElementById("studentidIp").value.trim();
@@ -212,7 +207,8 @@
     
 </script>
 
-<form class="p-5" action="/grade-management" method="post" id="addForm" style="display: none;">
+<!-- Create modal section -->
+<form class="p-5" action="/grade-management" method="post" id="addForm" style="display: none;" onsubmit="return validateForm()">
     <h3>Add New Grade</h3>
     <div class="mb-3">
         <input class="form-control" type="text" name="studentid" id="studentidIp" placeholder="Student ID" /></div>

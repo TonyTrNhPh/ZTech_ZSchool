@@ -10,7 +10,7 @@
             <div id="tab-1" class="tab-pane active" role="tabpanel">
                 <section class="p-5">
                     <section class="d-flex justify-content-sm-between mb-3">
-                        <h4>Student list ("number")</h4>
+                        <h4>Student list {{students|length}}</h4>
                         <div class="btn-group gap-3" role="group">
                             <button class="btn btn-primary" type="button" id="addNewStudentBtn">Add New Student</button>
                             <button class="btn btn-primary" type="button" id="refreshBtn" onclick="window.location.href='/student-management'">Refresh Table</button>
@@ -26,8 +26,6 @@
                                     <th>FullName</th>
                                     <th>DateOfBirth</th>
                                     <th>Gender</th>
-                                    <th>Status</th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,13 +39,6 @@
                                   <td>{{ student.gender }}</td>
                                   <td>
                                     {% if student.status == True %}
-                                      Active
-                                    {% else %}
-                                      Inactive
-                                    {% endif %}
-                                  </td>
-                                  <td>
-                                    {% if student.status == True %}
                                     <button class="btn btn-danger delete-btn" id ="deleteBtn">Delete</button>
                                     {% endif %}
                                 </td>
@@ -58,7 +49,8 @@
                     </div>
                 </section>
             </div>
-            
+
+<!-- Update modal section -->
 <section class="py-4 py-xl-5" id="updateFormSection" style="display: none;" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -85,6 +77,8 @@
         </div>
     </div>
 </section>
+
+<!-- Event table -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Lắng nghe sự kiện click vào một hàng trong bảng
@@ -126,20 +120,11 @@
             // Ẩn form cập nhật nếu đang hiển thị
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
-            // Gắn sự kiện submit cho form mới
-            document.getElementById("addForm").addEventListener("submit", function(event) {
-                event.preventDefault(); // Ngăn chặn hành động mặc định của form
-
-                // Thực hiện hàm validateForm() khi form được submit
-                if (validateForm()) {
-                    // Nếu hợp lệ, tiến hành submit form
-                    this.submit();
-                }
-            });
         });
     });
 </script>
 
+<!-- Event delete -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Lắng nghe sự kiện click vào nút Delete
@@ -187,53 +172,65 @@
 </script>
 
 
+<!-- validateForm -->
 <script>
     function validateForm() {
-        var userid = document.getElementById("useridIP").value.trim();
-        var fullname = document.getElementById("fullnameIP").value.trim();
-        var dateofbirth = document.getElementById("dateofbirthIP").value.trim();
-        var gender = document.getElementById("genderIP").value.trim();
-    
+        var useridInput = document.getElementById("useridIP");
+        var fullnameInput = document.getElementById("fullnameIP");
+        var dateofbirthInput = document.getElementById("dateofbirthIP");
+        var genderInput = document.getElementById("genderIP");
+        
+        var userid = useridInput.value.trim();
+        var fullname = fullnameInput.value.trim();
+        var dateofbirth = dateofbirthInput.value.trim();
+        var gender = genderInput.value.trim();
+        
         var errorMessage = "";
     
-        if (userid === "") {
+        if (!userid) {
             errorMessage += "Please enter User ID.\n";
+            useridInput.focus();
         }
-        if (fullname === "") {
+        if (!fullname) {
             errorMessage += "Please enter Full Name.\n";
+            fullnameInput.focus();
         }
-        if (dateofbirth === "") {
+        if (!dateofbirth) {
             errorMessage += "Please enter Date of Birth.\n";
+            dateofbirthInput.focus();
         }
-        if (gender === "") {
+        if (!gender) {
             errorMessage += "Please select Gender.\n";
+            genderInput.focus();
         }
-    
-        if (errorMessage !== "") {
+        
+        if (errorMessage) {
             alert(errorMessage);
             return false;
         }
         return true;
     }
-    
 </script>
-<form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;">
+
+<!-- Create modal section -->
+<form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;" onsubmit="return validateForm()">
     <h3>Add New Student</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" />
+        <input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" />
     </div>
     <div class="mb-3">
-      <input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="FullName" />
+        <input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="Full Name" />
     </div>
     <div class="mb-3">
         <input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" />
     </div>
     <div class="mb-3">
-        <input class="form-control" type="text" name="gender" id="gender" placeholder="Gender" />
+        <input class="form-control" type="text" name="gender" id="genderIP" placeholder="Gender" />
     </div>
     <div class="mb-3">
-      <input type="hidden" name="action1" value="add" />
-      <button class="btn btn-primary d-block w-100" type="submit">Add Student</button>
+        <input type="hidden" name="action1" value="add" />
+        <button class="btn btn-primary d-block w-100" type="submit">Add Student</button>
     </div>
-  </form>
+</form>
+
 {% endblock %}
