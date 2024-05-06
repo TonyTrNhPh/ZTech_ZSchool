@@ -26,7 +26,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Teacher ID</th>
-                                    <th>User ID</th>
                                     <th>Fullname</th>
                                     <th>Department</th>
                                     <th>Status</th>
@@ -39,7 +38,6 @@
                                 <tr class="teacher-row">
                                     <td>{{ loop.index }}</td>
                                     <td>{{ teacher.teacherid }}</td>
-                                    <td>{{ teacher.userid }}</td>
                                     <td>{{ teacher.fullname }}</td>
                                     <td>{{ teacher.department }}</td>
                                     <td>
@@ -225,11 +223,6 @@
 <form class="p-5" action="/teacher-management" method="post" id="addForm" style="display: none;">
     <h3>Add New Teacher</h3>
     <div class="mb-3">
-      <input class="form-control" type="text" name="teacherid" placeholder="Teacher ID" />
-    </div>  
-    <div class="mb-3">
-        <input class="form-control" type="text" name="userid" placeholder="User ID" />
-      </div>
       <div class="mb-3">
         <input class="form-control" type="text" name="fullname" placeholder="Full Name" />
       </div>

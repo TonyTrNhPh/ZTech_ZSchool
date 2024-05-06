@@ -107,22 +107,20 @@ def student_management():
         print(action)
         match action:
             case 'add':
-                userid = request.form['userid']
                 fullname = request.form['fullname']
                 dateofbirth = request.form['dateofbirth']
                 gender = request.form['gender']
-                dal.add_student(userid,fullname,dateofbirth,gender)
+                dal.add_student(fullname,dateofbirth,gender)
             case 'delete':
                 studentid = request.form['studentid']
                 dal.delete_student(studentid)
             case 'update':
                 studentid = request.form['studentid']
-                new_userid = request.form['userid']
                 new_fullname = request.form['fullname']
                 new_dateofbirth = request.form['dateofbirth']
                 new_gender = request.form['gender']
-                dal.update_student(studentid,new_userid,new_fullname,new_dateofbirth,new_gender)
-        return render_template('student-management.html', students=students)
+                dal.update_student(studentid,new_fullname,new_dateofbirth,new_gender)
+        return redirect(url_for('student_management'))
 
     return render_template('student-management.html', students=students)
 
@@ -135,11 +133,9 @@ def teacher_management():
         print(action)
         match action:
             case 'add':
-                teacherid = request.form['teacherid']
-                userid = request.form['userid']
                 fullname = request.form['fullname']
                 department = request.form['department']
-                dal.add_teacher(teacherid,userid,fullname,department)
+                dal.add_teacher(fullname,department)
             case 'delete':
                 teacherid = request.form['teacherid']
                 dal.delete_teacher(teacherid)
@@ -156,25 +152,26 @@ def teacher_management():
 @app.route('/course-management', methods=['GET','POST'])
 def course_management():
     courses = dal.get_all_courses()
+    print(courses)
     if request.method == 'POST':
         action = request.form['action1']
         print(action)
-        match action:
-            case 'add':
+        match action:  # Removed colon here
+            case 'add':  # Removed colon here
                 coursename = request.form['coursename']
                 teacherid = request.form['teacherid']
                 dal.add_course(coursename, teacherid)
-            case 'delete':
+            case 'delete':  # Removed colon here
                 courseid = request.form['courseid']
                 dal.delete_course(courseid)
-            case 'update':
+            case 'update':  # Removed colon here
                 courseid = request.form['courseid']
                 new_coursename = request.form['coursename']
                 new_teacherid = request.form['teacherid']
                 dal.update_course(courseid, new_coursename, new_teacherid)
-        return render_template('course-management.html', courses=courses)
 
     return render_template('course-management.html', courses=courses)
+
 
 
 @app.route('/grade-management', methods=['GET','POST'])
