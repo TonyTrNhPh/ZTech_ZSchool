@@ -1,3 +1,4 @@
+import re
 from flask import render_template, request, redirect, url_for, session
 from src import app, lm
 from src.models import Users, Announcements, Teachers, Courses, Grades, Students
