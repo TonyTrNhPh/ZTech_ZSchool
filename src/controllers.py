@@ -93,7 +93,6 @@ def student_management():
     students = dal.get_all_students()
     if request.method == 'POST':
         action = request.form['action1']
-        print(action)
         match action:
             case 'add':
                 fullname = request.form['fullname']
@@ -119,7 +118,6 @@ def teacher_management():
     teachers = dal.get_all_teachers()
     if request.method == 'POST':
         action = request.form['action1']
-        print(action)
         match action:
             case 'add':
                 fullname = request.form['fullname']
@@ -130,10 +128,9 @@ def teacher_management():
                 dal.delete_teacher(teacherid)
             case 'update':
                 teacherid = request.form['teacherid']
-                new_userid = request.form['userid']
                 new_fullname = request.form['fullname']
                 new_department = request.form['department']
-                dal.update_teacher(teacherid,new_userid,new_fullname,new_department)
+                dal.update_teacher(teacherid,new_fullname,new_department)
         return redirect(url_for('teacher_management'))
     
     return render_template('teacher-management.html', teachers=teachers)
@@ -141,10 +138,8 @@ def teacher_management():
 @app.route('/course-management', methods=['GET','POST'])
 def course_management():
     courses = dal.get_all_courses()
-    print(courses)
     if request.method == 'POST':
         action = request.form['action1']
-        print(action)
         match action:  # Removed colon here
             case 'add':  # Removed colon here
                 coursename = request.form['coursename']
@@ -158,7 +153,7 @@ def course_management():
                 new_coursename = request.form['coursename']
                 new_teacherid = request.form['teacherid']
                 dal.update_course(courseid, new_coursename, new_teacherid)
-
+        return redirect(url_for('course_management'))
     return render_template('course-management.html', courses=courses)
 
 
@@ -184,8 +179,7 @@ def grade_management():
                 new_courseid = request.form['courseid']
                 new_grade = request.form['grade']
                 dal.update_grade(gradeid,new_studentid,new_courseid,new_grade)
-        return render_template('grade-management.html', grades=grades)
-
+        return redirect(url_for('grade_management'))
     return render_template('grade-management.html', grades=grades)
 
 
