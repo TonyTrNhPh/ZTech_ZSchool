@@ -100,7 +100,10 @@ def student_management():
                 fullname = request.form['fullname']
                 dateofbirth = request.form['dateofbirth']
                 gender = request.form['gender']
+                # password = 123456
+                # usertype = 'sinh vien'
                 dal.add_student(userid,fullname,dateofbirth,gender)
+                # dal.add_user(userid,password,usertype)
             case 'delete':
                 studentid = request.form['studentid']
                 dal.delete_student(studentid)
