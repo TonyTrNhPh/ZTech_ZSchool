@@ -33,10 +33,25 @@ class Announcements(db.Model):
     __tablename__ = 'announcements'
     announcementid = Column(Integer, primary_key=True)
     userid = Column(Integer, ForeignKey(Users.userid), nullable=False)
-    title = Column(String(20), nullable=False)
-    discription = Column(String(200), nullable=False)
-    date = Column(String(20), nullable=False)
+    title = Column(String(100), nullable=False)
+    description = Column(String(2000), nullable=False)
+    who = Column(String(20), nullable=False)
+    date = Column(String(30), nullable=False)
+    published = Column(Boolean, default=True, nullable=False)
     status = Column(Boolean, default=True)
+    
+    def __init__(self,userid,title,description,who,date):
+        self.userid = userid
+        self.title = title
+        self.description = description
+        self.who = who
+        self.date = date
+        self.published = True
+        self.status = True
+        
+    def get_id(self):
+        return (self.announcementid)
+    
 
 
 class Teachers(db.Model):
@@ -73,3 +88,26 @@ class Grades(db.Model):
     courseid = Column(Integer, ForeignKey(Courses.courseid), nullable=False)
     grade = Column(Float, nullable=False)
     status = Column(Boolean, default=True)
+
+class Course_documents(db.Model):
+    __tablename__ = 'course_documents'
+    documentid = Column(Integer, primary_key=True)
+    documentname = Column(String(20), nullable=False)
+    supplier = Column(String(20), nullable=False)
+    year = Column(Integer, nullable=False)
+    courseid = Column(Integer, ForeignKey(Courses.courseid), nullable=False)
+
+class Course_feedback(db.Model):
+    __tablename__ = "course_feedback"
+    feedbackid = Column(Integer, primary_key=True)
+    courseid = Column(Integer, ForeignKey(Courses.courseid),nullable=False)
+    rating = Column(Integer, nullable=False)
+    comment = Column(String(100), nullable=False)
+
+
+class Attendance(db.Model):
+    __tablename__ = "attendance"
+    attendanceid = Column(Integer, primary_key=True)
+    courseid = Column(Integer, ForeignKey(Courses.courseid),nullable=False)
+    date = Column(String(20), nullable=False)
+    status = Column(String(20), nullable=False)

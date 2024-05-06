@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="p-5">
+    <h3>Student Profile</h3>
+    <div>
+        <div id="tab-2" class="tab-pane" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table" id="courseTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Student ID</th>
+                            <th>User ID</th>
+                            <th>Fullname</th>
+                            <th>DateOfBirth</th>
+                            <th>Gender</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                                <tr class="student-row">
+                                  <td>{{ loop.index }}</td>
+                                  <td>{{ student.studentid }}</td>
+                                  <td>{{ student.userid }}</td>
+                                  <td>{{ student.fullname }}</td>
+                                  <td>{{ student.dateofbirth }}</td>
+                                  <td>{{ student.gender }}</td>
+                                  <td>
+                                    {% if student.status == True %}
+                                      Active
+                                    {% else %}
+                                      Inactive
+                                    {% endif %}
+                                  </td>
+                                </tr>
+                              {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-4 py-xl-5" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                <div class="card mb-5">
+                    <div class="card-body p-sm-5">
+                        <h4 class="text-center mb-4">Student details</h4>
+                        <section>
+                            <form class="text-center" method="post" id="updateForm">
+                                <div class="mb-3"><input class="form-control" type="text" name="userid" id="useridIP" placeholder="User ID" disabled ="disabled" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="Full Name" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="gender" id="genderIP" placeholder="Gender" /></div>
+                                <div class="mb-3 d-flex justify-content-between mt-3">
+                                    <input type="hidden" name="action1" id="actionInput" value="update">
+                                    <input type="hidden" name="studentid" id="studentIDInput">
+                                    <button class="btn btn-primary d-block w-25" type="submit" id = "saveBtn">Save</button>
+                                    <button class="btn btn-primary d-block w-25 cancel-btn" type="button" id="cancelUpdateBtn">Cancel</button></div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lắng nghe sự kiện click vào một hàng trong bảng
+        document.querySelectorAll(".student-row").forEach(function(row) {
+            row.addEventListener("click", function() {
+                // Lấy dữ liệu từ hàng được chọn
+                var cells = row.getElementsByTagName("td");
+                var studentid = cells[1].innerText;
+                var userid = cells[2].innerText;
+                var fullname = cells[3].innerText;
+                var dateofbirth = cells[4].innerText;
+                var gender = cells[5].innerText;
+
+
+                // Điền dữ liệu vào form cập nhật
+                document.getElementById("studentIDInput").value = studentid;
+                document.getElementById("useridIP").value = userid;
+                document.getElementById("fullnameIP").value = fullname;
+                document.getElementById("dateofbirthIP").value = dateofbirth;
+                document.getElementById("genderIP").value = gender;
+
+
+                // Hiển thị form cập nhật
+                document.getElementById("updateFormSection").style.display = "block";
+
+                document.getElementById("addForm").style.display = "none";
+            });
+        });
+
+        // Lắng nghe sự kiện click vào nút Cancel
+        document.getElementById("cancelUpdateBtn").addEventListener("click", function() {
+            // Ẩn form cập nhật
+            document.getElementById("updateFormSection").style.display = "none";
+            document.getElementById("addForm").style.display = "none";
+        });
+
+        // Lắng nghe sự kiện click vào nút Add New Student
+        document.getElementById("addNewStudentBtn").addEventListener("click", function() {
+            // Ẩn form cập nhật nếu đang hiển thị
+            document.getElementById("updateFormSection").style.display = "none";
+            document.getElementById("addForm").style.display = "block";
+            // Gắn sự kiện submit cho form mới
+            document.getElementById("addForm").addEventListener("submit", function(event) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+                // Thực hiện hàm validateForm() khi form được submit
+                if (validateForm()) {
+                    // Nếu hợp lệ, tiến hành submit form
+                    this.submit();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    function refreshTable() {
+        // Lấy lại dữ liệu mới từ máy chủ và cập nhật bảng
+        fetch('/teacher-management') // Thay thế bằng URL của để lấy lại dữ liệu mới
+            .then(response => response.json())
+            .then(data => {
+                // Xóa hết các hàng trong bảng
+                document.getElementById("teacherTable").innerHTML = "";
+
+                // Thêm lại các hàng mới từ dữ liệu lấy được
+                data.forEach(teacher => {
+                    const newRow = `
+                        <tr class="course-row">
+                            <td>${teacher.teacherid}</td>
+                            <td>${teacher.userid}</td>
+                            <td>${teacher.fullname}</td>
+                            <td>${teacher.department}</td>
+                            <td>${teacher.status ? "Active" : "Inactive"}</td>
+                            <td>
+                                ${teacher.status ? `<button class="btn btn-danger delete-btn">Delete</button>` : ""}
+                            </td>
+                        </tr>
+                    `;
+                    document.getElementById("teacherTable").innerHTML += newRow;
+                });
+            });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lắng nghe sự kiện click vào nút làm mới
+        document.getElementById("refreshBtn").addEventListener("click", function() {
+            refreshTable();
+        });
+    });
+</script>
+
+
+{% endblock %}

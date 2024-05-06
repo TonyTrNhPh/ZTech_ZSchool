@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
   <section class="p-5">
-    <h3>Accounts Management</h3>
+    <h5>Accounts Management</h5>
     <div>
       <div class="tab-content border border-1">
         <section class="p-5">
           <section class="d-flex justify-content-sm-between mb-3">
-            <h4>
+            <h5>
               {% if (users|length) == 1 %}
                 There is 1 user
               {% else %}
                 There are {{ users|length }} users
               {% endif %}
-            </h4>
+            </h5>
             <div class="btn-group gap-3" role="group">
-              <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalCreate" onclick="resetData({{flag}})">Create new</button>
+              <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalCreate" onclick="resetData({{flag}})">Create new account</button>
             </div>
           </section>
           <div class="table-responsive">
@@ -51,19 +51,17 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">User details</h5>
+            <h5 class="modal-title">Create new account</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form class="text-center" method="post">
-              <div class="mb-3">
-                <input id="useridCreate" class="form-control" type="text" name="useridCreate" placeholder="Userid" disabled />
-              </div>
+              
               <div class="mb-3">
                 <input id="usernameCreate" class="form-control" type="text" name="usernameCreate" placeholder="Username" required />
               </div>
               <div class="mb-3 d-flex">
-                <input id="passwordCreate" class="form-control" type="text" name="passwordCreate" placeholder="******" disabled />
+                <input id="passwordCreate" class="form-control" type="password" name="passwordCreate" placeholder="******" readonly/>
               </div>
               <div class="d-flex">
                 <input id="roleCreate" class="form-control" type="text" name="usertypeCreate" placeholder="Role" required readonly/>
@@ -93,7 +91,7 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">User details</h5>
+            <h5 class="modal-title">Account details</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -121,7 +119,7 @@
               </div>
               <div class="mb-3 d-flex justify-content-between mt-3">
                 <input id="actionInp"type="hidden" name="hanhdong" />
-                <button class="btn btn-primary d-block w-25 btnAction" type="submit" data-type="update"="">Update</button>
+                <button class="btn btn-primary d-block w-25 btnAction" type="submit" data-type="update">Update</button>
                 <button class="btn btn-primary d-block w-25 btnAction" type="submit" data-type="delete">Delete</button>
                 <button class="btn btn-primary d-block w-25 cancel-btn" data-bs-dismiss="modal">Cancel</button>
               </div>
