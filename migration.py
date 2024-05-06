@@ -27,9 +27,18 @@ if __name__ == '__main__':
             who = 'Tất cả',
         )
         
+        example_course = Courses(
+            courseid = '1',
+            coursename = 'Test',
+            teacherid = '1',
+            status = True,            
+        )
+        
+        db.session.add(example_course)
+        db.session.commit()        
         # Add the data to the database
         # db.session.add(example_user)
-        db.session.add(example_announcement)
-        db.session.commit()
+        # db.session.add(example_announcement)
+        # db.session.commit()
 
 

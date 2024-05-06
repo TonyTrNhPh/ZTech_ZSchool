@@ -66,7 +66,8 @@ def delete_announcement(announcementid):
 
 ################################ Course Management ################################
 def get_all_courses():
-    return Courses.query.all
+    return Courses.query.filter_by(status=1).all()
+
 
 def add_course(coursename,teacherid):
     course = Courses(coursename=coursename,teacherid=teacherid)
