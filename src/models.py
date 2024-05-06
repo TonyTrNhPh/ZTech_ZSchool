@@ -62,6 +62,12 @@ class Teachers(db.Model):
     department = Column(String(20), nullable=False)
     status = Column(Boolean, default=True)
 
+    def __init__ (self, userid, fullname, department):
+        self.userid = userid
+        self.fullname = fullname
+        self.department = department
+        self.status = True
+        
 
 class Courses(db.Model):
     __tablename__ = 'courses'
@@ -79,6 +85,13 @@ class Students(db.Model):
     dateofbirth = Column(String(20), nullable=False)
     gender = Column(String(20), nullable=False)
     status = Column(Boolean, default=True)
+    
+    def __init__ (self, userid, fullname, dateofbirth, gender):
+        self.userid = userid
+        self.fullname = fullname
+        self.dateofbirth = dateofbirth
+        self.gender = gender
+        self.status = True
 
 
 class Grades(db.Model):

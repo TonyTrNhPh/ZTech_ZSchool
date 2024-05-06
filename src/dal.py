@@ -86,7 +86,7 @@ def update_course(courseid, new_coursename, new_teacherid):
         course.coursename = new_coursename
         course.teacherid = new_teacherid
         db.session.commit()
-
+################################################################ Students management #################################
 def get_all_students():
     return Students.query.all()
 
@@ -95,26 +95,34 @@ def get_student():
         userid = current_user.userid
     return Students.query.filter_by(userid=userid).all()
 
-def add_student(userid,fullname,dateofbirth,gender):
-    student = Students(userid=userid,fullname=fullname,dateofbirth=dateofbirth,gender=gender)
+def add_student(fullname,dateofbirth,gender):
+    user = Users(username='',password=dateofbirth,usertype='Sinh viên')
+    db.session.add(user)
+    db.session.flush()
+    student = Students(userid=user.userid,fullname=fullname,dateofbirth=dateofbirth,gender=gender)
     db.session.add(student)
+    db.session.flush()
+    user.username = student.studentid
     db.session.commit()
+    
+    
     
 def delete_student(studentid):
     student = Students.query.get(studentid)
+    user = Users.query.filter_by(userid=student.userid).first()
     if student:
+        user.status = 0
         db.session.delete(student)
         db.session.commit()
 
-def update_student(studentid,new_userid,new_fullname,new_dateofbirth,new_gender):
+def update_student(studentid,new_fullname,new_dateofbirth,new_gender):
     student = Students.query.get(studentid)
     if student:
-        student.userid = new_userid
         student.fullname = new_fullname
         student.dateofbirth = new_dateofbirth
         student.gender = new_gender
         db.session.commit()
-        
+################################################################ Grades management #################################################################       
 def get_all_grades():
     return Grades.query.all()
 
@@ -208,14 +216,18 @@ def update_attendance(attendanceid, new_courseid, new_date, new_status):
         attendance.date = new_date
         attendance.status = new_status
         db.session.commit()      
-        
-        
+################################################################ Teachers management #################################################################  
 def get_all_teachers():
     return Teachers.query.all()
 
-def add_teacher(teacherid,userid,fullname,department):
-    teacher = Teachers(teacherid=teacherid,userid=userid,fullname=fullname,department=department)
+def add_teacher(fullname,department):
+    user = Users(username='',password=department,usertype='Giáo viên')
+    db.session.add(user)
+    db.session.flush()
+    teacher = Teachers(userid=user.userid,fullname=fullname,department=department)
     db.session.add(teacher)
+    db.session.flush()
+    user.username = teacher.teacherid
     db.session.commit()
     
 def delete_teacher(teacherid):

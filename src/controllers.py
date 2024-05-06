@@ -96,25 +96,20 @@ def student_management():
         print(action)
         match action:
             case 'add':
-                userid = request.form['userid']
                 fullname = request.form['fullname']
                 dateofbirth = request.form['dateofbirth']
                 gender = request.form['gender']
-                # password = 123456
-                # usertype = 'sinh vien'
-                dal.add_student(userid,fullname,dateofbirth,gender)
-                # dal.add_user(userid,password,usertype)
+                dal.add_student(fullname,dateofbirth,gender)
             case 'delete':
                 studentid = request.form['studentid']
                 dal.delete_student(studentid)
             case 'update':
                 studentid = request.form['studentid']
-                new_userid = request.form['userid']
                 new_fullname = request.form['fullname']
                 new_dateofbirth = request.form['dateofbirth']
                 new_gender = request.form['gender']
-                dal.update_student(studentid,new_userid,new_fullname,new_dateofbirth,new_gender)
-        return render_template('student-management.html', students=students)
+                dal.update_student(studentid,new_fullname,new_dateofbirth,new_gender)
+        return redirect(url_for('student_management'))
 
     return render_template('student-management.html', students=students)
 
@@ -127,11 +122,9 @@ def teacher_management():
         print(action)
         match action:
             case 'add':
-                teacherid = request.form['teacherid']
-                userid = request.form['userid']
                 fullname = request.form['fullname']
                 department = request.form['department']
-                dal.add_teacher(teacherid,userid,fullname,department)
+                dal.add_teacher(fullname,department)
             case 'delete':
                 teacherid = request.form['teacherid']
                 dal.delete_teacher(teacherid)
