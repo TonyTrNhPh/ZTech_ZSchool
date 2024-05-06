@@ -59,7 +59,7 @@
                             <form class="text-center" method="post" id="updateForm">
                                 <div class="mb-3"><input class="form-control" type="text" name="studentid" id="studentIDInput" placeholder="Student ID" readonly/></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="Full Name" /></div>
-                                <div class="mb-3"><input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" /></div>
+                                <div class="mb-3"><input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="YYYY/MM/DD" /></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="gender" id="genderIP" placeholder="Gender" /></div>
                                 <div class="mb-3 d-flex justify-content-between mt-3">
                                     <input type="hidden" name="action1" id="actionInput" value="update">
@@ -166,47 +166,6 @@
     });
 </script>
 
-
-<!-- validateForm -->
-<!--<script>
-    function validateForm() {
-        var useridInput = document.getElementById("useridIP");
-        var fullnameInput = document.getElementById("fullnameIP");
-        var dateofbirthInput = document.getElementById("dateofbirthIP");
-        var genderInput = document.getElementById("genderIP");
-        
-        var userid = useridInput.value.trim();
-        var fullname = fullnameInput.value.trim();
-        var dateofbirth = dateofbirthInput.value.trim();
-        var gender = genderInput.value.trim();
-        
-        var errorMessage = "";
-    
-        if (!userid) {
-            errorMessage += "Please enter User ID.\n";
-            useridInput.focus();
-        }
-        if (!fullname) {
-            errorMessage += "Please enter Full Name.\n";
-            fullnameInput.focus();
-        }
-        if (!dateofbirth) {
-            errorMessage += "Please enter Date of Birth.\n";
-            dateofbirthInput.focus();
-        }
-        if (!gender) {
-            errorMessage += "Please select Gender.\n";
-            genderInput.focus();
-        }
-        
-        if (errorMessage) {
-            alert(errorMessage);
-            return false;
-        }
-        return true;
-    }
-</script> -->
-
 <!-- Create modal section -->
 <form class="p-5" action="/student-management" method="post" id="addForm" style="display: none;" onsubmit="return validateForm()">
     <h3>Add New Student</h3>
@@ -215,7 +174,7 @@
         <input class="form-control" type="text" name="fullname" id="fullnameIP" placeholder="Full Name" />
     </div>
     <div class="mb-3">
-        <input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="Date Of Birth" />
+        <input class="form-control" type="text" name="dateofbirth" id="dateofbirthIP" placeholder="YYYY/MM/DD" />
     </div>
     <div class="mb-3">
         <input class="form-control" type="text" name="gender" id="genderIP" placeholder="Gender" />
