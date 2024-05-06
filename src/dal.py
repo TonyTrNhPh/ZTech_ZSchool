@@ -238,6 +238,15 @@ def update_teacher1(teacherid,new_fullname,new_department):
         teacher.department = new_department
         db.session.commit()
         
+        
+def update_student1(studentid,new_fullname,new_dateofbirth,new_gender):
+    student = Students.query.get(studentid)
+    if student:
+        student.fullname = new_fullname
+        student.dateofbirth = new_dateofbirth
+        student.gender = new_gender
+        db.session.commit()
+        
 def get_teacher():
     if current_user.is_authenticated:
         userid = current_user.userid
