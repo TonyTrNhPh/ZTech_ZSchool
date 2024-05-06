@@ -58,6 +58,7 @@
                         <h4 class="text-center mb-4">Course Details</h4>
                         <section>
                             <form class="text-center" method="post" id="updateForm">
+                                <div class="mb-3"><input class="form-control" type="text" name="courseid" id="courseIdInput" placeholder="Course ID" readonly/></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="coursename" id="courseNameInput" placeholder="Course Name" /></div>
                                 <div class="mb-3"><input class="form-control" type="text" name="teacherid" id="teacherIdInput" placeholder="Teacher ID" /></div>
                                 <div class="mb-3 d-flex justify-content-between mt-3">
@@ -112,27 +113,6 @@
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
             
-            // Kiểm tra nếu sự kiện submit chưa được gắn
-            if (!document.getElementById("addForm").hasAttribute("data-submit-bound")) {
-                // Xóa đi sự kiện submit cũ nếu có
-                var previousSubmitEventHandler = function(event) {
-                    event.preventDefault(); // Ngăn chặn hành động mặc định của form
-
-                    // Thực hiện hàm validateForm() khi form được submit
-                    if (validateForm()) {
-                        // Nếu hợp lệ, tiến hành submit form
-                        this.submit();
-                    }
-                };
-                
-                document.getElementById("addForm").removeEventListener("submit", previousSubmitEventHandler);
-
-                // Gắn sự kiện submit cho form mới
-                document.getElementById("addForm").addEventListener("submit", previousSubmitEventHandler);
-
-                // Đánh dấu rằng sự kiện submit đã được gắn
-                document.getElementById("addForm").setAttribute("data-submit-bound", "true");
-            }
         });
     });
 </script>
@@ -150,7 +130,7 @@
                 var status = cells[4].innerText.trim().toLowerCase();
 
                 // Kiểm tra điều kiện về status
-                if (status === "active") {
+                //if (status === "active") {
                     // Hiển thị hộp thoại xác nhận trước khi xóa
                     if (confirm("Are you sure you want to delete this course?")) {
                         // Tạo một form ẩn để gửi yêu cầu xóa
@@ -176,9 +156,9 @@
                         document.body.appendChild(form);
                         form.submit();
                     }
-                } else {
-                    alert("You can only delete courses with 'Active' status.");
-                }
+                //} else {
+                //    alert("You can only delete courses with 'Active' status.");
+                //}
             }); 
         });
     });

@@ -116,7 +116,6 @@
             // Ẩn form cập nhật nếu đang hiển thị
             document.getElementById("updateFormSection").style.display = "none";
             document.getElementById("addForm").style.display = "block";
-            refreshTable();
         });
         
     });
@@ -131,10 +130,9 @@
                 var row = btn.closest("tr");
                 var cells = row.getElementsByTagName("td");
                 var teacherId = cells[1].innerText;
-                var status = cells[5].innerText.trim().toLowerCase();
 
                 // Kiểm tra điều kiện về status
-                if (status === "active") {
+                //if (status === "active") {
                     // Hiển thị hộp thoại xác nhận trước khi xóa
                     if (confirm("Are you sure you want to delete this teacher?")) {
                         // Tạo một form ẩn để gửi yêu cầu xóa
@@ -160,10 +158,9 @@
                         document.body.appendChild(form);
                         form.submit();
                     }
-                } else {
-                    alert("You can only delete courses with 'Active' status.");
-                }
-                refreshTable();
+                //} else {
+                //    alert("You can only delete courses with 'Active' status.");
+                //}
             });
         });
     });
